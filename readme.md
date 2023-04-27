@@ -19,6 +19,3 @@ To make a new migration:
 
 To query the database:
 > symfony console doctrine:query:sql "SELECT * FROM vinyl_mix"
-
-To make a new user:
-> symfony console make:user

@@ -33,7 +33,12 @@
         <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" style="margin-top: 20px;" href="{{ path('app_browse') }}">{{ app.user.username }}</a>
+                    <a class="nav-link" style="margin-top: 20px;"
+                       href="{{ path('app_browse') }}">
+                        {% if app.user %}
+                            {{ app.user.username }}
+                        {% endif %}
+                    </a>
                 </li>
                 <!-- Not Authenticated -->
                 <!-- <li class="nav-item"><button href="#" class="btn btn-primary btn-sm">Login</button></li> -->
