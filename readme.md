@@ -17,5 +17,8 @@ To make a new migration:
 > symfony console make:migration
 > symfony console doctrine:migrations:migrate
 
+To migrate to test env:
+> symfony console doctrine:migrations:migrate --env=test
+
 To query the database:
 > symfony console doctrine:query:sql "SELECT * FROM vinyl_mix"

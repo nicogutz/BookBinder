@@ -19,10 +19,7 @@ class Book
     #[ORM\Column(type: Types::BIGINT)]
     private ?string $ISBN13 = null;
 
-    #[ORM\Column(type: Types::BIGINT)]
-    private ?string $ISBN10 = null;
-
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT, length: 255)]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -33,6 +30,18 @@ class Book
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
+
+    #[ORM\Column]
+    private ?int $year = null;
+
+    #[ORM\Column]
+    private ?int $pageNumber = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $averageRating = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $ratingCount = null;
 
     #[ORM\ManyToMany(targetEntity: Author::class, inversedBy: 'books')]
     private Collection $authors;
@@ -63,18 +72,6 @@ class Book
     public function setISBN13(string $ISBN13): self
     {
         $this->ISBN13 = $ISBN13;
-
-        return $this;
-    }
-
-    public function getISBN10(): ?string
-    {
-        return $this->ISBN10;
-    }
-
-    public function setISBN10(string $ISBN10): self
-    {
-        $this->ISBN10 = $ISBN10;
 
         return $this;
     }
@@ -198,6 +195,54 @@ class Book
         if ($this->users->removeElement($user)) {
             $user->removeBook($this);
         }
+
+        return $this;
+    }
+
+    public function getYear(): ?int
+    {
+        return $this->year;
+    }
+
+    public function setYear(int $year): self
+    {
+        $this->year = $year;
+
+        return $this;
+    }
+
+    public function getPageNumber(): ?int
+    {
+        return $this->pageNumber;
+    }
+
+    public function setPageNumber(int $pageNumber): self
+    {
+        $this->pageNumber = $pageNumber;
+
+        return $this;
+    }
+
+    public function getAverageRating(): ?float
+    {
+        return $this->averageRating;
+    }
+
+    public function setAverageRating(?float $averageRating): self
+    {
+        $this->averageRating = $averageRating;
+
+        return $this;
+    }
+
+    public function getRatingCount(): ?int
+    {
+        return $this->ratingCount;
+    }
+
+    public function setRatingCount(?int $ratingCount): self
+    {
+        $this->ratingCount = $ratingCount;
 
         return $this;
     }
