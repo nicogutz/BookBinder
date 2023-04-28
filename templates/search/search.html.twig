@@ -1,12 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Search new books!{% endblock %}
 
 {% block body %}
-    <form method="post">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
 
         {% if app.user %}
             <div class="mb-3">
@@ -22,7 +18,7 @@
 
                 <input
                         type="text"
-                        value="{{ last_username }}"
+                        value="123"
                         name="username"
                         id="in"
                         class="bg-transparent block mt-10 mx-auto border-b-2 w-1/5 h-20 text-2xl outline-none"
