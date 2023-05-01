@@ -3,7 +3,7 @@
 @import "~@fontsource/roboto-condensed";
 
 body {
-    background-color: #17242C;
+    background-color: rgba(23, 36, 44, 0);
     color: #fff;
     font-family: 'Roboto Condensed', sans-serif;
 }
