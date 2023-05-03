@@ -16,10 +16,12 @@ class RegistrationControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('form[name="registration_form"]');
         $form = $crawler->filter('form[name="registration_form"]')->form([
-            'registration_form[username]' => 'mg',
+            'registration_form[username]' => 'test_user',
             'registration_form[plainPassword]' => 'password',
         ]);
         $client->submit($form);
         $this->assertResponseIsSuccessful('submit success');
+        $client->followRedirects();
+        $this->assertRouteSame('app_homepage');
     }
 }
