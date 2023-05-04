@@ -12,18 +12,47 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_homepage')]
     public function homepage(): Response
     {
-//        $tracks = [
-//            ['song' => 'Gangsta\'s Paradise', 'artist' => 'Coolio'],
-//            ['song' => 'Waterfalls', 'artist' => 'TLC'],
-//            ['song' => 'Creep', 'artist' => 'Radiohead'],
-//            ['song' => 'Kiss from a Rose', 'artist' => 'Seal'],
-//            ['song' => 'On Bended Knee', 'artist' => 'Boyz II Men'],
-//            ['song' => 'Fantasy', 'artist' => 'Mariah Carey'],
-//        ];
+        $books = [
+            [
+                'id' => '1',
+                'title' => 'On Bended Knee',
+                'author' => 'Boyz II Men',
+                'thumbnail' => 'http://books.google.com/books/content?id=XA5AZoZ4CkAC&printsec=frontcover&img=1&zoom=1&source=gbs_api',
+            ],
+            [
+                'id' => '2',
+                'title' => 'Gangsta\'s Paradise',
+                'author' => 'Coolio',
+                'thumbnail' => 'http://books.google.com/books/content?id=XA5AZoZ4CkAC&printsec=frontcover&img=1&zoom=1&source=gbs_api',
+            ],
+            [
+                'id' => '3',
+                'title' => 'Waterfalls',
+                'author' => 'TLC',
+                'thumbnail' => 'http://books.google.com/books/content?id=XA5AZoZ4CkAC&printsec=frontcover&img=1&zoom=1&source=gbs_api',
+            ],
+            [
+                'id' => '4',
+                'title' => 'Creep',
+                'author' => 'Radiohead',
+                'thumbnail' => 'http://books.google.com/books/content?id=XA5AZoZ4CkAC&printsec=frontcover&img=1&zoom=1&source=gbs_api',
+            ],
+            [
+                'id' => '5',
+                'title' => 'Kiss from a Rose',
+                'author' => 'Seal',
+                'thumbnail' => 'http://books.google.com/books/content?id=XA5AZoZ4CkAC&printsec=frontcover&img=1&zoom=1&source=gbs_api',
+            ],
+            [
+                'id' => '6',
+                'title' => 'Fantasy',
+                'author' => 'Mariah Carey',
+                'thumbnail' => 'http://books.google.com/books/content?id=XA5AZoZ4CkAC&printsec=frontcover&img=1&zoom=1&source=gbs_api',
+            ],
+        ];
 
         return $this->render('homepage.html.twig', [
-//            'title' => 'PB & Jams',
-//            'tracks' => $tracks,
+            'books' => $books,
         ]);
     }
 

@@ -20,8 +20,8 @@
 <body>
 
 <!-- Main Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark
-  mb-5" style="background-color: #78ad22;">
+<nav class="navbar bg-success navbar-expand-lg navbar-dark
+  mb-5">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ path('app_homepage') }}">
             <i class="fa-solid fa-book-open"></i>
@@ -36,8 +36,22 @@
                 <a class="nav-item nav-link active" href="{{ path('app_search') }}">Search <span class="sr-only">(current)</span></a>
                 <a class="nav-item nav-link" href="#">Features</a>
                 <a class="nav-item nav-link" href="#">Pricing</a>
-                <a class="nav-item nav-link ms-auto w-100 justify-content-end" href="/{{ app.user ? 'logout' : 'login'}}">Login</a>
             </div>
+            <ul class="nav navbar-nav ms-auto w-100 justify-content-end">
+
+                    {% if app.user %}
+                            <li class="nav-item nav-link active">
+                                <a class="nav-link " href="/logout">{{ app.user.username}} | Logout</a>
+                            </li>
+                    {% else %}
+                        <li class="nav-item ">
+                            <a class="nav-item nav-link active " href="/login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-item nav-link active " href="/register">Register </a>
+                        </li>
+                    {% endif %}
+            </ul>
         </div>
     </div>
 </nav>
