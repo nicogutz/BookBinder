@@ -52,6 +52,12 @@ class Book
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'books')]
     private Collection $users;
 
+    #[ORM\Column]
+    private ?float $price = null;
+
+    #[ORM\Column(length: 64)]
+    private ?string $genre = null;
+
     public function __construct()
     {
         $this->authors = new ArrayCollection();
@@ -243,6 +249,30 @@ class Book
     public function setRatingCount(?int $ratingCount): self
     {
         $this->ratingCount = $ratingCount;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): self
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    public function getGenre(): ?string
+    {
+        return $this->genre;
+    }
+
+    public function setGenre(string $genre): self
+    {
+        $this->genre = $genre;
 
         return $this;
     }
