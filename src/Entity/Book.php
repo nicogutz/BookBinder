@@ -43,20 +43,18 @@ class Book
     #[ORM\Column(nullable: true)]
     private ?int $ratingCount = null;
 
-    #[ORM\ManyToMany(targetEntity: Author::class, inversedBy: 'books')]
-    private Collection $authors;
-
-    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'books')]
-    private Collection $categories;
-
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'books')]
-    private Collection $users;
-
     #[ORM\Column]
     private ?float $price = null;
 
     #[ORM\Column(length: 64)]
     private ?string $genre = null;
+
+
+    #[ORM\ManyToMany(targetEntity: Author::class, inversedBy: 'books')]
+    private Collection $authors;
+
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'books')]
+    private Collection $users;
 
     public function __construct()
     {
@@ -150,30 +148,6 @@ class Book
     public function removeAuthor(Author $author): self
     {
         $this->authors->removeElement($author);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Category>
-     */
-    public function getCategories(): Collection
-    {
-        return $this->categories;
-    }
-
-    public function addCategory(Category $category): self
-    {
-        if (!$this->categories->contains($category)) {
-            $this->categories->add($category);
-        }
-
-        return $this;
-    }
-
-    public function removeCategory(Category $category): self
-    {
-        $this->categories->removeElement($category);
 
         return $this;
     }
