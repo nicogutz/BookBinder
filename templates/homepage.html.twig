@@ -3,8 +3,51 @@
 {% block title %}Welcome! | {{ parent() }}{% endblock %}
 
 {% block body %}
-    <div class="container">
+    <main role="main">
+        <!-- Main jumbotron for a primary marketing message or call to action -->
+        <div class="jumbotron bg-light text-black pt-3 pb-3 mb-5">
+            <div class="container">
+                <h1 class="display-3">Welcome to BookBinder!</h1>
+                <h4>Enjoy reading books and sharing the experience with others!</h4>
+                <hr>
+                {% if app.user %}
+                    <p> We displayed some of your favorite books for you {{ app.user.username }}!</p>
+                {% else %}
+                    <p>You are not logged in yet! Press "Login" to login to your personal account. <a class="btn btn-primary btn-success" href="{{ path('app_login') }}" role="button">Login »</a></p>
+                    <p>Haven't created an account yet, <a target="_blank" href="{{ path('app_terms') }}" style="color: #25a1dd"
+                                                          class="mb-3 me-2 mb-md-0 text-decoration-none lh-1">
+                            <u>create one for free!</u>
+                        </a></p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Example row of columns -->
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% if app.user %}
+                {% for book in books %}
+                    <div class="col mh-100">
+                        <div class="card bg-light h-100">
+                            <img src="{{ book.thumbnail}}" class="img-fluid" alt="Palm Springs Road"/>
+                            <div class="card-body">
+                                <h5 class="card-title text-black">{{ book.title }}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ book.author }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% else %}
+                    <div class=" text-black">
+                    <h5>Want to explore the available books?</h5>
+                        <a class="btn btn-primary btn-success" href="{{ path('app_login') }}" role="button">Search »</a></p>
+                    </div>
+                {% endif %}
+            </div>
+
+        </div> <!-- /container -->
+
+    </main>
 
 
-    </div>
 {% endblock %}
