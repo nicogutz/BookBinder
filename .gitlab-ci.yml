@@ -31,7 +31,7 @@ test-job:
         MYSQL_ROOT_PASSWORD: root_pass
         MYSQL_PASSWORD: cou_pass
         # set the correct DSN in Symfony to connect to the temporary database
-        DATABASE_URL: "mysql://cou_user:cou_pass@mysql/main"
+        DATABASE_URL: "mysql://cou_user:cou_pass@mysql/coubooks"
     # before starting the test scripts, add specific software to the container (only for this job)
     before_script:
         # mysql PDO needs to be installed as a PHP extension in the container for the tests to run
@@ -39,6 +39,7 @@ test-job:
     script:
         - composer install
         # run the migration on the temporary database
+        - php bin/console debug:container --env-vars
         - php bin/console doctrine:migrations:migrate
         # load some test data in the temporary database
         # - php bin/console doctrine:fixtures:load -n
