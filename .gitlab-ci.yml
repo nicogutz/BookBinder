@@ -26,7 +26,7 @@ test-job:
         - mysql:8
     variables:
         # environment variables for configuring the mysql test database container
-        MYSQL_DATABASE: main_test
+        MYSQL_DATABASE: main
         MYSQL_USER: user
         MYSQL_ROOT_PASSWORD: pass
         MYSQL_PASSWORD: pass
@@ -36,6 +36,7 @@ test-job:
     before_script:
         # mysql PDO needs to be installed as a PHP extension in the container for the tests to run
         - docker-php-ext-install pdo pdo_mysql
+        - mysql -uroot -ppass  <<< "CREATE DATABASE IF NOT EXISTS main_test;"
     script:
         - composer install
         # run the migration on the temporary database
