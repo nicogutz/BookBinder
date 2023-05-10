@@ -59,7 +59,7 @@ deploy-job:
         # we ignore the .git folder and the .env file
         # we delete the files on the remote server that are not present in the local copy
         - rsync -rv --exclude=".git/"
-                    --exclude=".env"
+                    --exclude=".env*"
                     --delete
                     ./ a22web25@shell.studev.groept.be:/var/www/html
     when: manual
