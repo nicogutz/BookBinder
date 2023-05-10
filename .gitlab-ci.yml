@@ -26,7 +26,7 @@ test-job:
         - mysql:8
     variables:
         # environment variables for configuring the mysql test database container
-        MYSQL_DATABASE: main_test
+        MYSQL_DATABASE: coubooks
         MYSQL_USER: cou_user
         MYSQL_ROOT_PASSWORD: root_pass
         MYSQL_PASSWORD: cou_pass
