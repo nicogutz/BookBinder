@@ -56,15 +56,4 @@ class HomeController extends AbstractController
         ]);
     }
 
-//    #[Route('/browse/{slug}', name: 'app_browse')]
-//    public function browse($slug = null): Response
-//    {
-//        $genre = $slug ? u(str_replace('-', ' ', $slug))->title(true) : null;
-//
-//        return $this->render('vinyl/browse.html.twig', [
-//            'genre' => $genre,
-//        ]);
-//    }
-
-
 }
