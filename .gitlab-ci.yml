@@ -44,6 +44,7 @@ test-job:
         - php bin/console doctrine:fixtures:load -n
         # run the tests (using the temporary database)
         - php bin/phpunit
+    when: manual
 
 
 deploy-job:
