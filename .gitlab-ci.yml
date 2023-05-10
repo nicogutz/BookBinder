@@ -56,6 +56,7 @@ deploy-job:
         DATABASE_URL: "mysql://a22web25:Gl9fZSi7@mysql.studev.groept.be:3306"
     script:
         - composer install --no-dev --optimize-autoloader
+        - php bin/console
         # rsync is a copy/sync tool we use to copy the current folder ./ to studev
         # we ignore the .git folder and the .env file
         # we delete the files on the remote server that are not present in the local copy
