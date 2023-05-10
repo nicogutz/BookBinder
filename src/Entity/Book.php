@@ -43,11 +43,15 @@ class Book
     #[ORM\Column(nullable: true)]
     private ?int $ratingCount = null;
 
+    #[ORM\Column]
+    private ?float $price = null;
+
+    #[ORM\Column(length: 64)]
+    private ?string $genre = null;
+
+
     #[ORM\ManyToMany(targetEntity: Author::class, inversedBy: 'books')]
     private Collection $authors;
-
-    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'books')]
-    private Collection $categories;
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'books')]
     private Collection $users;
@@ -149,30 +153,6 @@ class Book
     }
 
     /**
-     * @return Collection<int, Category>
-     */
-    public function getCategories(): Collection
-    {
-        return $this->categories;
-    }
-
-    public function addCategory(Category $category): self
-    {
-        if (!$this->categories->contains($category)) {
-            $this->categories->add($category);
-        }
-
-        return $this;
-    }
-
-    public function removeCategory(Category $category): self
-    {
-        $this->categories->removeElement($category);
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, User>
      */
     public function getUsers(): Collection
@@ -243,6 +223,30 @@ class Book
     public function setRatingCount(?int $ratingCount): self
     {
         $this->ratingCount = $ratingCount;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): self
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    public function getGenre(): ?string
+    {
+        return $this->genre;
+    }
+
+    public function setGenre(string $genre): self
+    {
+        $this->genre = $genre;
 
         return $this;
     }

@@ -39,6 +39,49 @@ class BookRepository extends ServiceEntityRepository
         }
     }
 
+       /**
+     * @return Book[] Returns an array of Book objects
+        * search by ISBN
+     */
+    public function findByISBN($value): array
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.isbn13 = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Book[] Returns an array of Book objects
+     * search by Title
+     */
+    public function findByTitle($value): array
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.title = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
+     * @return Book[] Returns an array of Book objects
+     * search by Author
+     */
+    public function findByAuthor(string $value): array
+    {
+        return $this->createQueryBuilder('b')
+            ->innerJoin('b.authors' ,'a' )
+            ->andWhere('a.name = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 //    /**
 //     * @return Book[] Returns an array of Book objects
 //     */

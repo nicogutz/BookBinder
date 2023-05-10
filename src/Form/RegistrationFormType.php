@@ -23,8 +23,8 @@ class RegistrationFormType extends AbstractType
                 'label' => false,
                 'attr' => [
                     'autocomplete' => 'username',
-                    'class' => 'bg-transparent block mt-10 mx-auto border-b-2 w-1/5 h-20 text-2xl outline-none',
-                    'placeholder' => 'username'
+                    'class' => ' flex-fill mb-0 bg-transparent block mt-2 mb-2 mx-auto border-b-2 w-1/5 h-20 text-2xl outline-none rounded',
+                    'placeholder' => 'Username'
                 ],
             ])
             ->add('agreeTerms', CheckboxType::class, [
@@ -42,7 +42,7 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'attr' => [
                     'autocomplete' => 'new-password',
-                    'class' => 'bg-transparent block mt-10 mx-auto border-b-2 w-1/5 h-20 text-2xl outline-none',
+                    'class' => 'bg-transparent block mt-10 mx-auto border-b-2 w-1/5 h-20 text-2xl outline-none rounded ',
                     'placeholder' => 'Password'
                 ],
                 'constraints' => [
