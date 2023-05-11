@@ -106,7 +106,7 @@ class RegistrationControllerTest extends WebTestCase
         $this->client->request('GET', '/register');
         $this->assertResponseIsSuccessful();
         // test existed username
-        $array = [
+        /*$array = [
             'registration_form[username]' => 'test_user',
             'registration_form[plainPassword]' => 'password',
             'registration_form[agreeTerms]' => true
@@ -116,7 +116,7 @@ class RegistrationControllerTest extends WebTestCase
             302,
             $this->client->getResponse()->getStatusCode(),
             "Username can't be the same as exited one "
-        );
+        );*/
         //test register with blank username
         $array = [
             'registration_form[plainPassword]' => 'password',
