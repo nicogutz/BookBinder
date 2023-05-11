@@ -1,14 +1,3 @@
-console.log("Hello again");
-
-console.log("hello once more");
-
-
-
-
-
-
-
-
 books= [
     {
         "id": 1,
