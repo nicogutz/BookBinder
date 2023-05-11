@@ -20,6 +20,9 @@ stages:
     - deploy
 
 test-job:
+    only:
+        - master
+
     stage: test
     services:
         # a container with a temporary mysql db for running unit tests
@@ -45,7 +48,6 @@ test-job:
         # - php bin/console doctrine:fixtures:load -n
         # run the tests (using the temporary database)
         - php bin/phpunit
-    when: manual
 
 
 deploy-job:
@@ -63,4 +65,3 @@ deploy-job:
         - rsync -rv --exclude=".git/"
                     --delete
                     ./ a22web25@shell.studev.groept.be:/var/www/html
-    when: manual
