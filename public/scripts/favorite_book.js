@@ -1,4 +1,7 @@
-let icon = document.querySelector('ion-icon');
-icon.onclick = function(){
-    icon.classList.toggle('active');
-}
+$("#favorite_button").click(function () {
+    $(this).toggleClass('btn-outline-danger btn-danger');
+});
+
+$("#critical_btn").click(function() {
+    $(this).toggleClass('btn-outline-danger btn-danger ');
+});
