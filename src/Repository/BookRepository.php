@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Book;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -39,9 +40,9 @@ class BookRepository extends ServiceEntityRepository
         }
     }
 
-       /**
+    /**
      * @return Book[] Returns an array of Book objects
-        * search by ISBN
+     * search by ISBN
      */
     public function findByISBN($value): array
     {
@@ -49,8 +50,7 @@ class BookRepository extends ServiceEntityRepository
             ->andWhere('b.isbn13 LIKE %:val%')
             ->setParameter('val', $value)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     /**
@@ -63,8 +63,7 @@ class BookRepository extends ServiceEntityRepository
             ->andWhere('b.title LIKE %:val%')
             ->setParameter('val', $value)
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
 
     /**
@@ -74,23 +73,26 @@ class BookRepository extends ServiceEntityRepository
     public function findByAuthor(string $value): array
     {
         return $this->createQueryBuilder('b')
-            ->innerJoin('b.authors' ,'a' )
+            ->innerJoin('b.authors', 'a')
             ->andWhere('a.name LIKE %:val%')
             ->setParameter('val', $value)
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
+
     /**
-     * @return Book Returns a book object
+     * @param int $id
+     * @return Book|null Returns a book object
+     * @throws NonUniqueResultException
      * search by ID
      */
-    public function findByID(int $id): Book{
+    public function findByID(int $id): Book|null
+    {
         return $this->createQueryBuilder('b')
             ->andWhere('b.id = :id')
             ->setParameter('id', $id)
             ->getQuery()
-            ->getResult();
+            ->getOneOrNullResult();
     }
 
 //    /**
