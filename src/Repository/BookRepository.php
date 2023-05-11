@@ -46,7 +46,7 @@ class BookRepository extends ServiceEntityRepository
     public function findByISBN($value): array
     {
         return $this->createQueryBuilder('b')
-            ->andWhere('b.isbn13 = :val')
+            ->andWhere('b.isbn13 LIKE %:val%')
             ->setParameter('val', $value)
             ->getQuery()
             ->getResult()
@@ -60,7 +60,7 @@ class BookRepository extends ServiceEntityRepository
     public function findByTitle($value): array
     {
         return $this->createQueryBuilder('b')
-            ->andWhere('b.title = :val')
+            ->andWhere('b.title LIKE %:val%')
             ->setParameter('val', $value)
             ->getQuery()
             ->getResult()
@@ -75,11 +75,22 @@ class BookRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('b')
             ->innerJoin('b.authors' ,'a' )
-            ->andWhere('a.name = :val')
+            ->andWhere('a.name LIKE %:val%')
             ->setParameter('val', $value)
             ->getQuery()
             ->getResult()
             ;
+    }
+    /**
+     * @return Book Returns a book object
+     * search by ID
+     */
+    public function findByID(int $id): Book{
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**
