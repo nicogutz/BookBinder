@@ -19,6 +19,10 @@ class BookInfoController extends AbstractController
     {
         $book = $repository->findByID($id);
 
+        if ($book === null) {
+            throw $this->createNotFoundException('The book does not exist');
+        }
+
         return $this->render('book/book_info.html.twig', [
             'book' => $book,
         ]);
