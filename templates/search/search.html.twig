@@ -19,19 +19,19 @@
                                 <div class="filter">
                                 <h4>Genre:</h4>
                                 <div class="checkbox">
-                                    <label><input type="checkbox" class="icheck" id="checkFantasy"> Fantasy</label>
+                                    <label><input name= "checkBoxGenre" type="checkbox" class="icheck" id="checkFantasy" value="Fantasy"> Fantasy</label>
                                 </div>
                                 <div class="checkbox">
-                                    <label><input type="checkbox" class="icheck" id="checkSF"> Science-fiction</label>
+                                    <label><input name= "checkBoxGenre" type="checkbox" class="icheck" id="checkSF" value="Science-fiction"> Science-fiction</label>
                                 </div>
                                 <div class="checkbox">
-                                    <label><input type="checkbox" class="icheck" id="checkA&A"> Action & Adventure</label>
+                                    <label><input name= "checkBoxGenre" type="checkbox" class="icheck" id="checkA&A" value="Action & Adventure"> Action & Adventure</label>
                                 </div>
                                 <div class="checkbox">
-                                    <label><input type="checkbox" class="icheck" id="checkThriller"> Thriller</label>
+                                    <label><input name= "checkBoxGenre" type="checkbox" class="icheck" id="checkThriller" value="Thriller"> Thriller</label>
                                 </div>
                                 <div class="checkbox">
-                                    <label><input type="checkbox" class="icheck" id="checkHorror"> Horror</label>
+                                    <label><input name= "checkBoxGenre" type="checkbox" class="icheck" id="checkHorror" value="Horror"> Horror</label>
                                 </div>
                                 </div>
                                 <!-- END FILTER BY CATEGORY -->
@@ -80,10 +80,15 @@
                                 <h4>Price:</h4>
                                 Select the maximum price!
                                 <div class="range">
-                                    <input type="range" name="range" min="1" max="100" value="100" onchange="range.value= '$'+ value">
+                                    <input type="range" name="range" min="1" max="100" value="100"  id="priceSlider" onchange="range.value= '$'+ value">
                                     <output id="range">$100</output>
                                 </div>
                                 <!-- END FILTER BY PRICE -->
+
+                                <!-- FILTER BUTTON -->
+                                <div class="pt-1 my-4">
+                                    <button class="btn btn-success btn-lg  type='submit'" id="filterButton">Filter</button>
+                                </div>
                             </div>
                             <!-- END FILTERS -->
                             <!-- BEGIN RESULT -->
