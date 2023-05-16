@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{book.title}} | {{ parent() }}{% endblock %}
+
+{% block body %}
+    <div class="container text-black mt-5 col-md-6">
+        <div class="card" style="background-color: #eee;">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mt-5">
+                        <div class="white-box text-center"><img src={{ book.thumbnail}} width="300" height="600" class="img-thumbnail bg-success p-2"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <h4 class="box-title mt-5"><b>{{ book.title }}</b></h4>
+                        <h5 class="mt-4">{{ book.subtitle }}</h5>
+                        <ul class="mt-5">
+                            <li>Release year: {{ book.year }}</li>
+                            <li>Genre: {{ book.genre }}</li>
+                            <li>ISBN: {{ book.isbn13 }}</li>
+                        </ul>
+                        <button class="btn btn-outline-danger mt-4" id="favorite_button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                            </svg>
+                            Favorite
+                        </button>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <h3 class="box-title mt-5">Summary</h3>
+                        <p>{{ book.description }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/scripts/favorite_book.js"></script>
+{% endblock %}
