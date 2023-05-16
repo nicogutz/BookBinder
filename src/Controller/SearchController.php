@@ -22,7 +22,7 @@ class SearchController extends AbstractController
     }
 
     #[Route('/search_isbn/{isbn}', name: 'app_search_isbn', methods: ['GET'])]
-    public function searchISBN(string $isbn, BookRepository $repository): Response
+    public function searchISBN(int $isbn, BookRepository $repository): Response
     {
         $books = $repository->findByISBN($isbn);
 
@@ -32,6 +32,13 @@ class SearchController extends AbstractController
     public function searchTitle(string $title, BookRepository $repository): Response
     {
         $books = $repository->findByTitle($title);
+        return $this->json($books);
+    }
+
+    #[Route('/search_author/{author}', name: 'app_search_author', methods: ['GET'])]
+    public function searchAuthor(string $author, BookRepository $repository): Response
+    {
+        $books = $repository->findByAuthor($author);
         return $this->json($books);
     }
 
