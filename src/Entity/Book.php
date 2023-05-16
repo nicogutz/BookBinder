@@ -62,7 +62,6 @@ class Book implements JsonSerializable
     public function __construct()
     {
         $this->authors = new ArrayCollection();
-        $this->categories = new ArrayCollection();
         $this->users = new ArrayCollection();
     }
 
