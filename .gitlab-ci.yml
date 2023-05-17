@@ -55,10 +55,10 @@ deploy-job:
         DATABASE_URL: "mysql://a22web25:Gl9fZSi7@mysql.studev.groept.be:3306"
     script:
         - composer install
-        - php bin/console doctrine:migrations:migrate
         # rsync is a copy/sync tool we use to copy the current folder ./ to studev
         # we ignore the .git folder and the .env file
         # we delete the files on the remote server that are not present in the local copy
         - rsync -rv --exclude=".git/"
                     --delete
                     ./ a22web25@shell.studev.groept.be:/var/www/html
+        - ssh -t a22web25@shell.studev.groept.be "cd /var/www/html; php bin/console doctrine:migrations:migrate"
