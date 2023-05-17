@@ -45,14 +45,14 @@
 
                     {% if app.user %}
                             <li class="nav-item nav-link active">
-                                <a class="nav-link " href="/logout">{{ app.user.username}} | Logout</a>
+                                <a class="nav-link " href="{{ path('app_logout') }}">{{ app.user.username}} | Logout</a>
                             </li>
                     {% else %}
                         <li class="nav-item ">
-                            <a class="nav-item nav-link active " href="/login">Login</a>
+                            <a class="nav-item nav-link active " href="{{ path('app_login') }}">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-item nav-link active " href="/register">Register </a>
+                            <a class="nav-item nav-link active " href="{{ path('app_register') }}">Register </a>
                         </li>
                     {% endif %}
             </ul>
