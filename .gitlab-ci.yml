@@ -14,7 +14,8 @@ before_script:
     # this container runs Alpine Linux, where apk is the package manager (not apt-get)
     - apk add rsync
     # Every job will start a container with a clone from the current repo
-
+    - docker-php-ext-install pdo pdo_mysql
+    
 stages:
     - test
     - deploy
@@ -35,10 +36,6 @@ test-job:
         MYSQL_PASSWORD: pass
         # set the correct DSN in Symfony to connect to the temporary database
         DATABASE_URL: "mysql://root:pass@mysql/main"
-    # before starting the test scripts, add specific software to the container (only for this job)
-    before_script:
-        # mysql PDO needs to be installed as a PHP extension in the container for the tests to run
-        - docker-php-ext-install pdo pdo_mysql
     script:
         - composer install
         # run the migration on the temporary database
