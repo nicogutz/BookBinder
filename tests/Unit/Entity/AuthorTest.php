@@ -18,9 +18,11 @@ class AuthorTest extends TestCase
     public function testAddBook():void
     {
         $book1 = new Book();
+        $this->assertNotNull($book1);
         $author = new Author();
         $author->addBook($book1);
-        $this->assertEquals(1,$author->getBooks(),'List should contain only 1 book');
+        $author->addBook($book1);
+        $this->assertCount(1,$author->getBooks(),'List can not have same book');
         $this->assertTrue($author->getBooks()->contains($book1),'Book1 should be in the book list.');
         $this->assertTrue($book1->getAuthors()->contains($author),'author should be connected to the book.');
     }
@@ -32,7 +34,7 @@ class AuthorTest extends TestCase
         $author = new Author();
         $author->addBook($book1);
         $author->addBook($book2);
-        $this->assertEquals(2,$author->getBooks(),'List should have 2 books');
+        $this->assertCount(2,$author->getBooks(),'List should have 2 books');
         $this->assertTrue($author->getBooks()->contains($book1),'Book1 should be in the book list');
         $this->assertTrue($author->getBooks()->contains($book2),'Book2 should be in the book list');
     }
@@ -42,9 +44,9 @@ class AuthorTest extends TestCase
         $author = new Author();
         $book = new Book();
         $author->addBook($book);
-        $this->assertEquals(1,$author->getBooks(),'List should have 1 books');
+        $this->assertCount(1,$author->getBooks(),'List should have 1 books');
         $author->removeBook($book);
-        $this->assertEquals(0,$author->getBooks(),'List should be empty');
+        $this->assertCount(0,$author->getBooks(),'List should be empty');
         $this->assertFalse($author->getBooks()->contains($book));
         $this->assertFalse($book->getAuthors()->contains($author));
     }

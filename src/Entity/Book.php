@@ -7,9 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use function MongoDB\BSON\toJSON;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
-class Book
+class Book implements JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -59,7 +62,6 @@ class Book
     public function __construct()
     {
         $this->authors = new ArrayCollection();
-        $this->categories = new ArrayCollection();
         $this->users = new ArrayCollection();
     }
 
@@ -249,5 +251,26 @@ class Book
         $this->genre = $genre;
 
         return $this;
+    }
+
+    /**
+     * This function serializes the contents to serve them through the API.
+     * @return array
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'genre' => $this->getGenre(),
+            'author' => $this->getAuthors()->toArray()[0]->getName(),  // There are no books with multiple authors in our DB.
+            'title' => $this->getTitle(),
+            'subtitle' => $this->getSubtitle(),
+            'thumbnail' => $this->getThumbnail(),
+            'year' => $this->getYear(),
+            'pageNumber' => $this->getPageNumber(),
+            'averageRating' => $this->getAverageRating(),
+            'price' => $this->getPrice(),
+        ];
+
     }
 }
