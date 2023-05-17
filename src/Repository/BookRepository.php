@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Book;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -39,32 +40,31 @@ class BookRepository extends ServiceEntityRepository
         }
     }
 
-       /**
+    /**
      * @return Book[] Returns an array of Book objects
-        * search by ISBN
+     * search by ISBN
      */
-    public function findByISBN($value): array
+    public function findByISBN(string $value): array
     {
+
         return $this->createQueryBuilder('b')
-            ->andWhere('b.isbn13 = :val')
-            ->setParameter('val', $value)
+            ->andWhere('b.ISBN13 LIKE :val')
+            ->setParameter('val', '%'.$value.'%')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     /**
      * @return Book[] Returns an array of Book objects
      * search by Title
      */
-    public function findByTitle($value): array
+    public function findByTitle(string $value): array
     {
         return $this->createQueryBuilder('b')
-            ->andWhere('b.title = :val')
-            ->setParameter('val', $value)
+            ->andWhere('b.title LIKE :val')
+            ->setParameter( 'val', '%'.$value.'%')
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
 
     /**
@@ -74,12 +74,26 @@ class BookRepository extends ServiceEntityRepository
     public function findByAuthor(string $value): array
     {
         return $this->createQueryBuilder('b')
-            ->innerJoin('b.authors' ,'a' )
-            ->andWhere('a.name = :val')
-            ->setParameter('val', $value)
+            ->innerJoin('b.authors', 'a')
+            ->andWhere('a.name LIKE :val')
+            ->setParameter('val', '%'.$value.'%')
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
+    }
+
+    /**
+     * @param int $id
+     * @return Book|null Returns a book object
+     * @throws NonUniqueResultException
+     * search by ID
+     */
+    public function findByID(int $id): Book|null
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
 //    /**

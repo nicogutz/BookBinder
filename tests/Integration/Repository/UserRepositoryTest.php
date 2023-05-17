@@ -3,12 +3,13 @@
 namespace App\Tests\Integration\Repository;
 
 use App\Entity\User;
+use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 
 class UserRepositoryTest extends KernelTestCase
 {
-    private $entityManager;
+    private EntityManager $entityManager;
     protected function setUp(): void
     {
         $kernel = self::bootKernel();
