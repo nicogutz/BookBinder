@@ -1,7 +1,20 @@
-$("#favorite_button").click(function () {
-    $(this).toggleClass('btn-outline-danger btn-danger');
-});
+$(document).ready(function () {
 
-$("#critical_btn").click(function() {
-    $(this).toggleClass('btn-outline-danger btn-danger ');
-});
+        $("#favorite_button").click(function () {
+            if (user_id != null) {
+                $(this).toggleClass('btn-outline-danger btn-danger');
+                $.ajax({
+                    type: "POST",
+                    url: '/book_like',
+                    data: {
+                        'book_id': book_id,
+                        'user_id': user_id
+                    },
+                });
+            } else {
+                alert("Please login to add to favorites.");
+            }
+        });
+
+    }
+)
