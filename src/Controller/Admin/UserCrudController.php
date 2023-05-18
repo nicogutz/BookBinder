@@ -4,6 +4,9 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -12,14 +15,12 @@ class UserCrudController extends AbstractCrudController
         return User::class;
     }
 
-    /*
     public function configureFields(string $pageName): iterable
     {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
+        yield IdField::new('id')
+            ->onlyOnIndex();
+        yield Field::new('username');
+        yield AssociationField::new('books')
+            ->autocomplete();
     }
-    */
 }

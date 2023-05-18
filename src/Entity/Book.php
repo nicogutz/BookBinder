@@ -258,6 +258,11 @@ class Book implements JsonSerializable
         return $this;
     }
 
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
+
     /**
      * This function serializes the contents to serve them through the API.
      * @return array
