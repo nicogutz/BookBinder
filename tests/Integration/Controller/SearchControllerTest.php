@@ -5,7 +5,7 @@ namespace App\Tests\Integration\Controller;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class HomeControllerTest extends WebTestCase
+class SearchControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
     protected function setUp(): void
@@ -16,11 +16,9 @@ class HomeControllerTest extends WebTestCase
     public function testRoutingWithoutLogin(): void
     {
         // Request a specific page
-        $this->client->request('GET', '/');
+        $this->client->request('GET', '/search');
         // Validate a successful response and some content
-        $this->assertResponseIsSuccessful('register is not accessible');
-
+        $this->assertResponseIsSuccessful('search is not accessible');
+        $this->assertSelectorExists('main','You are not logged in yet!');
     }
-
-
 }
