@@ -14,7 +14,8 @@ before_script:
     # this container runs Alpine Linux, where apk is the package manager (not apt-get)
     - apk add rsync
     # Every job will start a container with a clone from the current repo
-
+    - docker-php-ext-install pdo pdo_mysql
+    
 stages:
     - test
     - deploy
@@ -35,10 +36,6 @@ test-job:
         MYSQL_PASSWORD: pass
         # set the correct DSN in Symfony to connect to the temporary database
         DATABASE_URL: "mysql://root:pass@mysql/main"
-    # before starting the test scripts, add specific software to the container (only for this job)
-    before_script:
-        # mysql PDO needs to be installed as a PHP extension in the container for the tests to run
-        - docker-php-ext-install pdo pdo_mysql
     script:
         - composer install
         # run the migration on the temporary database
@@ -58,10 +55,10 @@ deploy-job:
         DATABASE_URL: "mysql://a22web25:Gl9fZSi7@mysql.studev.groept.be:3306"
     script:
         - composer install
-        - php bin/console
         # rsync is a copy/sync tool we use to copy the current folder ./ to studev
         # we ignore the .git folder and the .env file
         # we delete the files on the remote server that are not present in the local copy
         - rsync -rv --exclude=".git/"
                     --delete
                     ./ a22web25@shell.studev.groept.be:/var/www/html
+        - ssh -t a22web25@shell.studev.groept.be "cd /var/www/html; php bin/console doctrine:migrations:migrate"
