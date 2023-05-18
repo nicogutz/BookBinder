@@ -138,6 +138,11 @@ class Book implements JsonSerializable
         return $this->authors;
     }
 
+    public function getAuthor(): string
+    {
+        return $this->authors->first()->getName();
+    }
+
     public function addAuthor(Author $author): self
     {
         if (!$this->authors->contains($author)) {
@@ -262,7 +267,8 @@ class Book implements JsonSerializable
         return [
             'id' => $this->getId(),
             'genre' => $this->getGenre(),
-            'author' => $this->getAuthors()->toArray()[0]->getName(),  // There are no books with multiple authors in our DB.
+            'author' => $this->getAuthors()->toArray()[0]->getName(),
+            // There are no books with multiple authors in our DB.
             'title' => $this->getTitle(),
             'subtitle' => $this->getSubtitle(),
             'thumbnail' => $this->getThumbnail(),
