@@ -9,6 +9,10 @@ use function Symfony\Component\String\u;
 
 class LegalController extends AbstractController
 {
+    /**
+     * @return Response
+     * This method will render the privacy page.
+     */
     #[Route('/terms', name: 'app_terms')]
     public function terms(): Response
     {

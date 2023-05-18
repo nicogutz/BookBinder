@@ -20,7 +20,7 @@ class BookInfoController extends AbstractController
     /**
      * @param int $id
      * @param BookRepository $repository
-     * @param UserInterface $user
+     * @param Security $security
      * @return Response
      * This method is used to display the book information page. It
      * takes the book id as a parameter and uses the BookRepository to find the corresponding book.
