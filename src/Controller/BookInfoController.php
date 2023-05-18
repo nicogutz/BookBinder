@@ -7,6 +7,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,8 +26,10 @@ class BookInfoController extends AbstractController
      * takes the book id as a parameter and uses the BookRepository to find the corresponding book.
      */
     #[Route('/book_info/{id}', name: 'app_book_info')]
-    public function terms(int $id, BookRepository $repository, UserInterface $user): Response
+    public function terms(int $id, BookRepository $repository, Security $security): Response
     {
+        $user = $security->getUser();
+
         try {
             $book = $repository->findByID($id);
         } catch (NonUniqueResultException) {
@@ -36,11 +39,17 @@ class BookInfoController extends AbstractController
         if ($book === null) {
             throw $this->createNotFoundException('The book does not exist');
         }
+
         $book->setGenre(ucwords(str_replace('_', ' - ', $book->getGenre())));
+        if ($user){
+            $likes_book = $user->getBooks()->contains($book);
+        } else{
+            $likes_book = false;
+        }
 
         return $this->render('book/book_info.html.twig', [
             'book' => $book,
-            'likes_book' => $user->getBooks()->contains($book),
+            'likes_book' => $likes_book,
         ]);
     }
 
