@@ -25,23 +25,24 @@
             </div>
         </div>
 
-        <div class="container">
+        <div class="container" >
             <!-- Example row of columns -->
             <div class="row row-cols-1 row-cols-md-3 g-4">
-                {% if app.user %}
+                {% if app.user and books is not empty%}
                     {% for book in books %}
-                        <div class="col mh-100">
+                        <a class="col mh-100" href="{{ path('app_book_info', {'id': book.id}) }}">
                             <div class="card bg-light h-100">
                                 <img src="{{ book.thumbnail }}" class="img-fluid" alt="Palm Springs Road"/>
                                 <div class="card-body">
-                                    <h5 class="card-title text-black">{{ book.title }}</h5>
+                                    <h5  class="card-title text-black">{{ book.title }}</h5>
                                     <h6 class="card-subtitle mb-2 text-muted">{{ book.author }}</h6>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     {% endfor %}
-                {% else %}
+                {% elseif app.user and books is empty%}
                     <div class=" text-black">
+                        <h5>You need to add books to your favorites. </h5>
                         <h5>Want to explore the available books?</h5>
                         <a class="btn btn-primary btn-success" href="{{ path('app_search') }}" role="button">Search
                             »</a>
