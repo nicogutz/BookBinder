@@ -18,12 +18,12 @@ class BookInfoController extends AbstractController
 {
 
     /**
+     * This method is used to display the book information page. It
+     * takes the book id as a parameter and uses the BookRepository to find the corresponding book.
      * @param int $id
      * @param BookRepository $repository
      * @param Security $security
      * @return Response
-     * This method is used to display the book information page. It
-     * takes the book id as a parameter and uses the BookRepository to find the corresponding book.
      */
     #[Route('/book_info/{id}', name: 'app_book_info')]
     public function terms(int $id, BookRepository $repository, Security $security): Response
@@ -54,12 +54,12 @@ class BookInfoController extends AbstractController
     }
 
     /**
+     * This method is used to add or remove a book from the user's favorites.
+     * It is meant to be used from the book information page using a POST request.
      * @param Request $request
      * @param BookRepository $bookRepository
      * @param UserRepository $userRepository
      * @return Response
-     * This method is used to add or remove a book from the user's favorites.
-     * It is meant to be used from the book information page using a POST request.
      */
     #[Route('/book_like', name: 'app_book_like', methods: ['POST'])]
     public function book_like_toggle(

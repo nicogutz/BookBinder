@@ -11,10 +11,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     /**
-     * @param Security $security
-     * @return Response
      * This method is used to display the homepage. It takes the user
      * entity and returns the books liked by that user if they exist.
+     * @param Security $security
+     * @return Response
      */
     #[Route('/', name: 'app_homepage')]
     public function homepage(Security $security): Response

@@ -13,11 +13,11 @@ class SecurityController extends AbstractController
 {
 
     /**
+     * This method serves the login page and handles the login form.
      * @param AuthenticationUtils $authenticationUtils
      * @return Response
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
-     * This method serves the login page and handles the login form.
      */
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
@@ -36,6 +36,10 @@ class SecurityController extends AbstractController
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
+    /**
+     * This method is used to log out the user.
+     * @return void
+     */
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
     {
