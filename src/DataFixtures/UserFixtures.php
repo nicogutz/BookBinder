@@ -4,7 +4,6 @@ namespace App\DataFixtures;
 
 use App\Entity\Book;
 use App\Entity\User;
-use App\Repository\BookRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
