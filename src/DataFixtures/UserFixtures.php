@@ -22,8 +22,21 @@ class UserFixtures extends Fixture
         $user->setUsername('test_user');
         $hashedPassword = $this->passwordHasher->hashPassword($user,'password');
         $user->setPassword($hashedPassword);
-
         $manager->persist($user);
+
+        $user = new User();
+        $user->setUsername('user');
+        $hashedPassword = $this->passwordHasher->hashPassword($user,'password');
+        $user->setPassword($hashedPassword);
+        $manager->persist($user);
+
+        $user = new User();
+        $user->setUsername('admin');
+        $user->setRoles(['ROLE_ADMIN']);
+        $hashedPassword = $this->passwordHasher->hashPassword($user,'password');
+        $user->setPassword($hashedPassword);
+        $manager->persist($user);
+
         $manager->flush();
     }
 }
