@@ -9,14 +9,15 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class SearchControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
-    private $entityManager;
+    private $bookRepository;
     protected function setUp(): void
     {
         $this->client = static::createClient();
         $kernel = self::bootKernel();
-        $this->entityManager = $kernel->getContainer()
+        $entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
+        $this->bookRepository = $entityManager->getRepository(Book::class);
     }
     public function testSearch(): void
     {
@@ -33,8 +34,7 @@ class SearchControllerTest extends WebTestCase
         $content = $response->getContent();
         $this->assertJson($content);
         $result = json_decode($content, true);
-        $bookRepository = $this->entityManager->getRepository(Book::class);
-        $expect = $bookRepository->findByISBN($isbn);
+        $expect = $this->bookRepository->findByISBN($isbn);
         foreach ($expect as $index => $expect)
         {
             $this->assertSame($expect->getId(),$result[$index]['id']);
@@ -59,8 +59,7 @@ class SearchControllerTest extends WebTestCase
         $content = $response->getContent();
         $this->assertJson($content);
         $result = json_decode($content, true);
-        $bookRepository = $this->entityManager->getRepository(Book::class);
-        $expect = $bookRepository->findByTitle($title);
+        $expect = $this->bookRepository->findByTitle($title);
         foreach ($expect as $index => $expect)
         {
             $this->assertSame($expect->getId(),$result[$index]['id']);
@@ -85,8 +84,7 @@ class SearchControllerTest extends WebTestCase
         $content = $response->getContent();
         $this->assertJson($content);
         $result = json_decode($content, true);
-        $bookRepository = $this->entityManager->getRepository(Book::class);
-        $expect = $bookRepository->findByAuthor($author);
+        $expect = $this->bookRepository->findByAuthor($author);
         foreach ($expect as $index => $expect)
         {
             $this->assertSame($expect->getId(),$result[$index]['id']);
