@@ -40,26 +40,6 @@
                                     </div>
                                 </div>
                                 <!-- END FILTER BY CATEGORY -->
-                                <div class="filter">
-                                    <h4>Language:</h4>
-                                    <div class="checkbox">
-                                        <label><input type="checkbox" class="icheck"> English</label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label><input type="checkbox" class="icheck"> Dutch</label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label><input type="checkbox" class="icheck"> German</label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label><input type="checkbox" class="icheck"> Chinese</label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label><input type="checkbox" class="icheck"> Spanish</label>
-                                    </div>
-
-                                    <div class="padding"></div>
-                                </div>
 
                                 <!-- BEGIN FILTER BY DATE -->
                                 <div class="filter">
@@ -67,7 +47,7 @@
                                     From
                                     <div class="input-group date form_date" data-date="2014-06-14T05:25:07Z"
                                          data-date-format="dd-mm-yyyy" data-link-field="dtp_input1">
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" id="dateFilterFrom">
                                         <span class="input-group-addon bg-blue"><i class="fa fa-th"></i></span>
                                     </div>
                                     <input type="hidden" id="dtp_input1" value="">
@@ -75,7 +55,7 @@
                                     To
                                     <div class="input-group date form_date" data-date="2014-06-14T05:25:07Z"
                                          data-date-format="dd-mm-yyyy" data-link-field="dtp_input2">
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" id="dateFilterTo">
                                         <span class="input-group-addon bg-blue"><i class="fa fa-th"></i></span>
                                     </div>
                                     <input type="hidden" id="dtp_input2" value="">
@@ -88,7 +68,7 @@
                                 Select the maximum price!
                                 <div class="range">
                                     <input type="range" name="range" min="1" max="100" value="100" id="priceSlider"
-                                           onchange="range.value= '$'+ value">
+                                           oninput="changePrice(this.value)">
                                     <output id="range">$100</output>
                                 </div>
                                 <!-- END FILTER BY PRICE -->
@@ -106,23 +86,23 @@
                                 <hr>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                           id="inlineRadio1" value="option1">
+                                           id="radio_author" value="author">
                                     <label class="form-check-label" for="inlineRadio1">Author</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                           id="inlineRadio2" value="option2">
+                                           id="radio_ISBN" value="isbn">
                                     <label class="form-check-label" for="inlineRadio2">ISBN</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                           id="inlineRadio3" value="option3">
+                                           id="radio_title" value="title">
                                     <label class="form-check-label" for="inlineRadio3">Title</label>
                                 </div>
                                 <!-- BEGIN SEARCH INPUT -->
                                 <div class="input-group rounded">
-                                    <input type="search" class="form-control rounded" placeholder="Search"
-                                           aria-label="Search" aria-describedby="search-addon"/>
+                                    <input type="search" name="searchBar" class="form-control rounded" placeholder="Search"
+                                           aria-label="Search" aria-describedby="search-addon" id="Searchbar"/>
                                     <span class="input-group-text border-0" id="search-addon">
     <i class="fas fa-search"></i>
   </span>

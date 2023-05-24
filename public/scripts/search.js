@@ -1,100 +1,13 @@
-books= [
-    {
-        "id": 1,
-        "title": "Book 1",
-        "author": "Author 1",
-        "genre": "Fantasy",
-        "price": 15,
-        "image": "https://www.bootdey.com/image/400x300/FF8C00",
-        "rating": 4.5,
-        "description": "This is the product description."
-    },
-    {
-        "id": 2,
-        "title": "Book 2",
-        "author": "Author 2",
-        "genre": "Science-fiction",
-        "price": 44,
-        "image": "https://www.bootdey.com/image/400x300/5F9EA0",
-        "rating": 3.5,
-        "description": "This is the product description."
-    },
-    {
-        "id": 3,
-        "title": "Book 3",
-        "author": "Author 3",
-        "genre": "Action & Adventure",
-        "price": 39.9,
-        "image": "https://www.bootdey.com/image/400x300/5F9EA0",
-        "rating": 3.5,
-        "description": "This is the product description."
-    },
-    {
-        "id": 4,
-        "title": "Book 4",
-        "author": "Author 4",
-        "genre": "Science-fiction",
-        "price": 80,
-        "image": "https://www.bootdey.com/image/400x300/5F9EA0",
-        "rating": 3.5,
-        "description": "This is the product description."
-    },
-    {
-        "id": 5,
-        "title": "Book 5",
-        "author": "Author 5",
-        "genre": "Science-fiction",
-        "price": 23.5,
-        "image": "https://www.bootdey.com/image/400x300/5F9EA0",
-        "rating": 3.5,
-        "description": "This is the product description."
-    },
-    {
-        "id": 6,
-        "title": "Book 6",
-        "author": "Author 6",
-        "genre": "Horror",
-        "price": 50,
-        "image": "https://www.bootdey.com/image/400x300/5F9EA0",
-        "rating": 3.5,
-        "description": "This is the product description."
-    },
-    {
-        "id": 7,
-        "title": "Book 7",
-        "author": "Author 7",
-        "genre": "Thriller",
-        "price": 60.6,
-        "image": "https://www.bootdey.com/image/400x300/5F9EA0",
-        "rating": 3.5,
-        "description": "This is the product description."
-    },
-    {
-        "id": 8,
-        "title": "Book 8",
-        "author": "Author 8",
-        "genre": "Science-fiction",
-        "price": 59,
-        "image": "https://www.bootdey.com/image/400x300/5F9EA0",
-        "rating": 3.5,
-        "description": "This is the product description."
-    },
-    {
-        "id": 9,
-        "title": "Book 2",
-        "author": "Author 2",
-        "genre": "Science-fiction",
-        "price": 35.2,
-        "image": "https://www.bootdey.com/image/400x300/5F9EA0",
-        "rating": 3.5,
-        "description": "This is the product description."
-    },
+let books;
 
-]
+
 
 function filterList(checkboxName){
     let filteredBooks;
-    let priceRange= document.getElementById("priceSlider");
+    let dateRangeFrom= document.getElementById("dateFilterFrom").value;
+    let dateRangeTo= document.getElementById("dateFilterTo").value;
+    console.log(dateRangeFrom + " " + dateRangeTo);
+    let priceRange= document.getElementById("priceSlider").value;
     let checkboxes= document.querySelectorAll('input[name="' + checkboxName + '"]:checked'),
         values = [];
     Array.prototype.forEach.call(checkboxes, function(el) {
@@ -110,8 +23,14 @@ function filterList(checkboxName){
             console.log(checkboxes);
             filteredBooks= books;
         }
-        filteredBooks= filteredBooks.filter(filteredBooks => filteredBooks.price <= priceRange.value);
-
+        if (dateRangeFrom==""){
+            dateRangeFrom= 0;
+        }
+        if (dateRangeTo==""){
+            dateRangeTo= Infinity;
+        }
+        filteredBooks= filteredBooks.filter(filteredBooks => filteredBooks.price <= priceRange)
+            .filter(filteredBooks =>filteredBooks.year >= dateRangeFrom && filteredBooks.year <=dateRangeTo)
         return filteredBooks;
 
     }
@@ -125,33 +44,106 @@ function filterList(checkboxName){
             const book = filteredBooks[i];
             const tr = document.createElement('tr');
             tr.innerHTML = `  
- 
         <td class="number text_center">${i+1}</td>
-        <td class="image is-4by3"><img src="${book.image}" alt=""></td>
-        <td class="product"><strong>${book.title}</strong><br>${book.description}</td>
-        <td class="rate text-right"><span><i class=" fa fa-star"></i><i class=" fa fa-star"></i><i class=" fa fa-star"></i></span></td>
+        <td class="image is-4by3"><img src="${book.thumbnail}" alt=""></td>
+        <td class="product w-75" ><strong>${book.title}</strong><br>${book.subtitle}</td>
+        <td class="rate text-right">${generateRatingStars(book.averageRating)}</td>
         <td class="price text-right">${ "$" +book.price}</td>
     
     `;
             bookList.appendChild(tr);
         }
-    };
-
-$(document).ready(displayBooks(filterList('checkBoxGenre')));
+    }
 
 
-$(document).ready(function (){
-    $('#filterButton').click(function(){
-        displayBooks(filterList('checkBoxGenre'));
+
+
+
+
+
+
+function generateRatingStars(ratingValue) {
+    let temp= 0;
+    let starsHTML = '';
+    for (let i = 0; i < ratingValue; i++) {
+        if(ratingValue > i && ratingValue < i+1){
+            if(ratingValue < i+0.25){
+                break;
+            }else if(ratingValue > i+0.75){
+                starsHTML += '<i class="fa fa-star"></i>';
+                temp++;
+            }
+            else{
+                console.log("between the 2 spaces")
+                starsHTML += '<i class="fa fa-star"></i>';
+                temp++;
+            }
+        }
+        else {
+            starsHTML += '<i class="fa fa-star"></i>';
+            temp++;
+        }
+    }
+    return `<span class="d-flex justify-content-between">${starsHTML}</span>`;
+}
+
+
+
+
+
+
+
+
+
+
+$(document).ready(function () {
+    $("#Searchbar").keyup(function(event) {
+        if (event.keyCode === 13) {
+            $("#search-addon").click();
+            console.log("juiste keycode");
+        }
+    });
+    $("#search-addon").click(function ()
+    {
+        let radioOption = document.querySelector('input[name="inlineRadioOptions"]:checked').value;
+        let searchBarValue = document.getElementById("Searchbar").value;
+        if (radioOption !== null) {
+            // Radio button is checked, access its value
+            console.log("Selected option: " + radioOption);
+            $.get('http://127.0.0.1:8000/search_' + radioOption + '/' + searchBarValue, function (data, status) {
+                books= data;
+                console.log(books[0]);
+                displayBooks(filterList('checkBoxGenre'));
+            });
+        } else {
+            // No radio button is checked
+            console.log("No option selected");
+        }
     });
 });
 
+function changePrice(val){
+    document.getElementById("range").innerHTML= "$"+val;
+}
+
+
+$('#filterButton').click(function(){
+    displayBooks(filterList('checkBoxGenre'));
+});
+
+/*
+let radioOption= document.querySelector('input[name="inlineRadioOptions"]:checked').value;
+let searchBarValue= document.getElementById("Searchbar").value;
+console.log( "radio: "+ radioOption + "searchbar: "+searchBarValue)
+if(radioOption!==null) {
+    $.get('http://127.0.0.1:8000/search_' + radioOption + '/' + searchBarValue, function (data, status) {
+        alert("Data: " + data + "\nStatus: " + status);
+        for (let i = 0; i < 8; i++) {
+            books[i] = data[i];
+        }
+    });
+}
 
 
 
-
-
-
-
-
-
+ */
