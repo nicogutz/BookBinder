@@ -48,6 +48,9 @@ test-job:
 
 
 deploy-job:
+    stage: deploy
+    needs: 
+        - test-job
     # run this job only when there is a push on the master branch
     only:
         - master
