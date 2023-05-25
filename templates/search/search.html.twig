@@ -2,6 +2,7 @@
 
 {% block title %}Search new books!{% endblock %}
 {% block body %}
+
     <link href="/styles/search.css" rel="stylesheet" type="text/css"/>
     <div class="container">
         <div class="row">
@@ -87,17 +88,17 @@
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="inlineRadioOptions"
                                            id="radio_author" value="author">
-                                    <label class="form-check-label" for="inlineRadio1">Author</label>
+                                    <label class="form-check-label" for="radio_author">Author</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="inlineRadioOptions"
                                            id="radio_ISBN" value="isbn">
-                                    <label class="form-check-label" for="inlineRadio2">ISBN</label>
+                                    <label class="form-check-label" for="radio_ISBN">ISBN</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="inlineRadioOptions"
                                            id="radio_title" value="title">
-                                    <label class="form-check-label" for="inlineRadio3">Title</label>
+                                    <label class="form-check-label" for="radio_title">Title</label>
                                 </div>
                                 <!-- BEGIN SEARCH INPUT -->
                                 <div class="input-group rounded">
@@ -115,17 +116,15 @@
                                 <div class="row">
                                     <!-- BEGIN ORDER RESULT -->
                                     <div class="col-sm-6">
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-default dropdown-toggle"
-                                                    data-toggle="dropdown">
-                                                Order by <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li><a href="#">Name</a></li>
-                                                <li><a href="#">Date</a></li>
-                                                <li><a href="#">View</a></li>
-                                                <li><a href="#">Rating</a></li>
-                                            </ul>
+                                        <div class="dropdown">
+                                            <label for="OrderDropDown">Order By:</label>
+                                            <select name="OrderBy" id="OrderDropDown">
+                                                <option name="OrderItem" selected="selected" value="name">Name</option>
+                                                <option name="OrderItem" value="date">Date</option>
+                                                <option name="OrderItem" value="pageNumber">Pages</option>
+                                                <option name="OrderItem" value="rating">Rating</option>
+                                            </select>
+
                                         </div>
                                     </div>
                                     <!-- END ORDER RESULT -->
