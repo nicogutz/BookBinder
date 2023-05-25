@@ -47,7 +47,7 @@ function filterList(checkboxName){
             tr.innerHTML = `  
         <td class="number text_center">${i+1}</td>
         <td class="image is-4by3"><img src="${book.thumbnail}" alt=""></td>
-        <td class="product w-75" ><strong>${book.title}</strong><br>${book.subtitle}</td>
+        <td class="product w-75" ><strong>${book.title}</strong><br>${book.author}</td>
         <td class="rate text-right">${generateRatingStars(book.averageRating)}</td>
         <td class="price text-right">${ "$" +book.price}</td>
     
