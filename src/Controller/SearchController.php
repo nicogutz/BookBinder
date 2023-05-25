@@ -10,6 +10,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SearchController extends AbstractController
 {
+    private BookRepository $repository;
+
+    /**
+     * This method is the constructor of the class, it initializes the book repository used by most methods.
+     */
+    public function __construct(BookRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     /**
      * This method returns the search page.
      * @return Response
@@ -24,13 +34,12 @@ class SearchController extends AbstractController
     /**
      * This method is the API endpoint for searching by ISBN.
      * @param int $isbn
-     * @param BookRepository $repository
      * @return Response
      */
     #[Route('/search_isbn/{isbn}', name: 'app_search_isbn', methods: ['GET'])]
-    public function searchISBN(int $isbn, BookRepository $repository): Response
+    public function searchISBN(int $isbn): Response
     {
-        $books = $repository->findByISBN($isbn);
+        $books = $this->repository->findByISBN($isbn);
 
         return $this->json($books);
     }
@@ -38,26 +47,26 @@ class SearchController extends AbstractController
     /**
      * This method is the API endpoint for searching by title.
      * @param string $title
-     * @param BookRepository $repository
      * @return Response
      */
     #[Route('/search_title/{title}', name: 'app_search_title', methods: ['GET'])]
-    public function searchTitle(string $title, BookRepository $repository): Response
+    public function searchTitle(string $title): Response
     {
-        $books = $repository->findByTitle($title);
+        $books = $this->repository->findByTitle($title);
+
         return $this->json($books);
     }
 
     /**
      * This method is the API endpoint for searching by author.
      * @param string $author
-     * @param BookRepository $repository
      * @return Response
      */
     #[Route('/search_author/{author}', name: 'app_search_author', methods: ['GET'])]
-    public function searchAuthor(string $author, BookRepository $repository): Response
+    public function searchAuthor(string $author): Response
     {
-        $books = $repository->findByAuthor($author);
+        $books = $this->repository->findByAuthor($author);
+
         return $this->json($books);
     }
 

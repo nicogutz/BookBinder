@@ -21,6 +21,12 @@ class AuthorRepository extends ServiceEntityRepository
         parent::__construct($registry, Author::class);
     }
 
+    /**
+     * Saves an author to the database.
+     * @param Author $entity
+     * @param bool $flush
+     * @return void
+     */
     public function save(Author $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
@@ -30,6 +36,12 @@ class AuthorRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * Removes an author from the database.
+     * @param Author $entity
+     * @param bool $flush
+     * @return void
+     */
     public function remove(Author $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
@@ -38,29 +50,4 @@ class AuthorRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-
-//    /**
-//     * @return Author[] Returns an array of Author objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Author
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }

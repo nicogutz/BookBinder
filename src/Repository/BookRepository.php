@@ -22,6 +22,12 @@ class BookRepository extends ServiceEntityRepository
         parent::__construct($registry, Book::class);
     }
 
+    /**
+     * Saves a book to the database.
+     * @param Book $entity
+     * @param bool $flush
+     * @return void
+     */
     public function save(Book $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
@@ -31,6 +37,12 @@ class BookRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * Removes a book from the database.
+     * @param Book $entity
+     * @param bool $flush
+     * @return void
+     */
     public function remove(Book $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
@@ -62,7 +74,7 @@ class BookRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('b')
             ->andWhere('b.title LIKE :val')
-            ->setParameter( 'val', '%'.$value.'%')
+            ->setParameter('val', '%'.$value.'%')
             ->getQuery()
             ->getResult();
     }
@@ -96,28 +108,4 @@ class BookRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-//    /**
-//     * @return Book[] Returns an array of Book objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('b.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Book
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }

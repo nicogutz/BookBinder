@@ -47,7 +47,7 @@ function filterList(checkboxName){
             tr.innerHTML = `  
         <td class="number text_center">${i+1}</td>
         <td class="image is-4by3"><img src="${book.thumbnail}" alt=""></td>
-        <td class="product w-75" ><strong>${book.title}</strong><br>${book.subtitle}</td>
+        <td class="product w-75" ><strong>${book.title}</strong><br>${book.author}</td>
         <td class="rate text-right">${generateRatingStars(book.averageRating)}</td>
         <td class="price text-right">${ "$" +book.price}</td>
     
@@ -111,7 +111,7 @@ $(document).ready(function () {
         if (radioOption !== null) {
             // Radio button is checked, access its value
             console.log("Selected option: " + radioOption);
-            $.get('http://127.0.0.1:8000/search_' + radioOption + '/' + searchBarValue, function (data, status) {
+            $.get('search_' + radioOption + '/' + searchBarValue, function (data, status) {
                 books= data;
                 console.log(books[0]);
                 displayBooks(filterList('checkBoxGenre'));
