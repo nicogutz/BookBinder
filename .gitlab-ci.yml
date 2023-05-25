@@ -65,6 +65,7 @@ deploy-job:
         - rsync -rv --exclude=".git/"
                     --exclude="bundles"
                     --exclude=".env"
+                    --exclude=".htaccess"
                     --exclude="config/packages/framework.yaml"
                     --delete
                     ./ a22web25@shell.studev.groept.be:/var/www/html
