@@ -56,6 +56,7 @@ deploy-job:
         - master
     variables:
         DATABASE_URL: "mysql://a22web25:Gl9fZSi7@mysql.studev.groept.be:3306"
+        APP_ENV: "prod"
     script:
         - composer install --no-dev
         # rsync is a copy/sync tool we use to copy the current folder ./ to studev
