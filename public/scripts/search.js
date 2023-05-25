@@ -6,7 +6,6 @@ function filterList(checkboxName){
     let filteredBooks;
     let dateRangeFrom= document.getElementById("dateFilterFrom").value;
     let dateRangeTo= document.getElementById("dateFilterTo").value;
-    console.log(dateRangeFrom + " " + dateRangeTo);
     let priceRange= document.getElementById("priceSlider").value;
     let checkboxes= document.querySelectorAll('input[name="' + checkboxName + '"]:checked'),
         values = [];
@@ -15,12 +14,10 @@ function filterList(checkboxName){
     });
         if(values.length!=0){
             console.log("values isn't empty");
-            console.log(values);
             filteredBooks= books.filter(books => values.includes(books.genre) );
         }
         else{
             console.log("values is empty");
-            console.log(checkboxes);
             filteredBooks= books;
         }
         if (dateRangeFrom==""){
@@ -29,8 +26,8 @@ function filterList(checkboxName){
         if (dateRangeTo==""){
             dateRangeTo= Infinity;
         }
-        filteredBooks= filteredBooks.filter(filteredBooks => filteredBooks.price <= priceRange)
-            .filter(filteredBooks =>filteredBooks.year >= dateRangeFrom && filteredBooks.year <=dateRangeTo)
+        filteredBooks= filteredBooks.filter(filteredBooks => filteredBooks.price <= priceRange);
+        filteredBooks= filteredBooks.filter(filteredBooks =>filteredBooks.year >= dateRangeFrom && filteredBooks.year <=dateRangeTo);
         return filteredBooks;
 
     }
@@ -39,10 +36,14 @@ function filterList(checkboxName){
     function displayBooks(filteredBooks) {
         const bookList = document.querySelector('#bookList');
         bookList.innerHTML = '';
-
         for (let i = 0; i < filteredBooks.length; i++) {
             const book = filteredBooks[i];
+            if(book.subtitle== null){
+                console.log("subtitle is null");
+                book.subtitle = "No description available for this book";
+            }
             const tr = document.createElement('tr');
+
             tr.innerHTML = `  
         <td class="number text_center">${i+1}</td>
         <td class="image is-4by3"><img src="${book.thumbnail}" alt=""></td>
@@ -75,7 +76,7 @@ function generateRatingStars(ratingValue) {
             }
             else{
                 console.log("between the 2 spaces")
-                starsHTML += '<i class="fa fa-star"></i>';
+                starsHTML += '<i class="fa fa-star-half-o"></i>';
                 temp++;
             }
         }
@@ -100,7 +101,7 @@ $(document).ready(function () {
     $("#Searchbar").keyup(function(event) {
         if (event.keyCode === 13) {
             $("#search-addon").click();
-            console.log("juiste keycode");
+            console.log("updated");
         }
     });
     $("#search-addon").click(function ()
