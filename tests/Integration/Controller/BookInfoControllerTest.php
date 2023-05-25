@@ -4,6 +4,7 @@ namespace App\Tests\Integration\Controller;
 
 use App\Entity\Book;
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
