@@ -111,7 +111,7 @@ $(document).ready(function () {
         if (radioOption !== null) {
             // Radio button is checked, access its value
             console.log("Selected option: " + radioOption);
-            $.get('http://127.0.0.1:8000/search_' + radioOption + '/' + searchBarValue, function (data, status) {
+            $.get('search_' + radioOption + '/' + searchBarValue, function (data, status) {
                 books= data;
                 console.log(books[0]);
                 displayBooks(filterList('checkBoxGenre'));
