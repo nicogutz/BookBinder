@@ -6,10 +6,12 @@
     <main role="main">
         <!-- Main jumbotron for a primary marketing message or call to action -->
         <div class="jumbotron bg-light text-black pt-3 pb-3 mb-5">
-            <div class="container">
+            <div class="container mb-5">
+                <div class="mb-5">
                 <h1 class="display-3">Welcome to BookBinder!</h1>
                 <h4>Enjoy reading books and sharing the experience with others!</h4>
                 <hr>
+                </div>
                 {% if app.user and books is not empty%}
                     <p> We displayed some of your favorite books for you {{ app.user.username }}!</p>
                 {% elseif app.user %}
@@ -19,7 +21,6 @@
                                 class="btn btn-primary btn-success" href="{{ path('app_login') }}" role="button">Login
                             »</a></p>
                     <p>Haven't created an account yet, <a target="_blank" href="{{ path('app_register') }}"
-                                                          style="color: #25a1dd"
                                                           class="mb-3 me-2 mb-md-0 text-decoration-none lh-1">
                             <u>create one for free!</u>
                         </a></p>
@@ -43,7 +44,7 @@
                         </a>
                     {% endfor %}
                 {% elseif app.user and books is empty%}
-                    <div class=" text-black">
+                    <div class="text-black">
                         <h5>You need to add books to your favorites. </h5>
                         <h5>Want to explore the available books?</h5>
                         <a class="btn btn-primary btn-success" href="{{ path('app_search') }}" role="button">Search
