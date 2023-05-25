@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use function Symfony\Component\String\u;
 
 class BookInfoController extends AbstractController
@@ -62,6 +63,7 @@ class BookInfoController extends AbstractController
      * @return Response
      */
     #[Route('/book_like', name: 'app_book_like', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
     public function book_like_toggle(
         Request $request,
         BookRepository $bookRepository,
