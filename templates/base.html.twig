@@ -43,8 +43,9 @@
         <div class="expand navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-item nav-link active" href="{{ path('app_search') }}">Search <span class="sr-only">(current)</span></a>
-                <a class="nav-item nav-link" href="#">Features</a>
-                <a class="nav-item nav-link" href="#">Pricing</a>
+                {% if app.user and "ROLE_ADMIN" in app.user.roles %}
+                    <a class="nav-item nav-link" href="{{ path('admin') }}">Admin</a>
+                {% endif %}
             </div>
             <ul class="nav navbar-nav ms-auto w-100 justify-content-end">
 
