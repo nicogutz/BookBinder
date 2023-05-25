@@ -46,6 +46,10 @@ To make a new migration:
 
 To migrate to test env:
 > symfony console doctrine:migrations:migrate --env=test
+>php .\bin\console  doctrine:migrations:migrate --env=test
 
-To query the database:
+ Execute the test: 
+>php bin/phpunit path
+
+ To query the database:
 > symfony console doctrine:query:sql "SELECT * FROM vinyl_mix"
