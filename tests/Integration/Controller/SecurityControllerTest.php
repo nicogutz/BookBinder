@@ -68,4 +68,20 @@ class SecurityControllerTest extends WebTestCase
         $this->assertSelectorTextContains('nav', 'Login');
     }
 
+    /**
+     * @depends testSubmitValidData
+     */
+    public function testSubmitInvalidPassword():void
+    {
+        $this->client->request('GET', '/login');
+        $test_user = $this->userRepo->findOneBy(['username' => 'test_user']);
+        $crawler = $this->client->getCrawler();
+        $form = $crawler->filter('form[method="post"]')->form();
+        $form['username'] = 'test_user';
+        $form['password'] = 'wrongpassword';
+        $crawler = $this->client->submit($form);
+        $this->client->request('GET', '/');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('nav', 'Login');
+    }
 }
