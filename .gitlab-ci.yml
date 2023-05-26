@@ -55,7 +55,7 @@ deploy-job:
     only:
         - master
     variables:
-        DATABASE_URL: "mysql://a22web25:Gl9fZSi7@mysql.studev.groept.be:3306"
+        DATABASE_URL: "$DATABASE_URL"
         APP_ENV: "prod"
     script:
         - composer install --no-dev
