@@ -8,8 +8,6 @@ let filteredBooks;
         for (let i = 0; i < filteredBooks.length; i++) {
             const book = filteredBooks[i];
             if(book.subtitle== null){
-                console.log("subtitle is null");
-                console.log(book.id);
                 book.subtitle = "No description available for this book";
             }
             const tr = document.createElement('tr');
@@ -25,7 +23,6 @@ let filteredBooks;
             tr.addEventListener('click', function () {
                 // Define the URL you want to navigate to
                 const newLink = '/book_info/'+book.id;
-                console.log(book.id + "\n"+ newLink);
                 // Navigate to the new link
                 window.location.href = newLink;
             });
@@ -52,7 +49,6 @@ function generateRatingStars(ratingValue) {
                 temp++;
             }
             else{
-                console.log("between the 2 spaces")
                 starsHTML += '<i class="fa fa-star-half-o"></i>';
                 temp++;
             }
@@ -63,7 +59,7 @@ function generateRatingStars(ratingValue) {
         }
     }
     for (let i=0; i<(5-temp); i++){
-        starsHTML += '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">\n' +
+        starsHTML += '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="13" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">\n' +
             '  <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>\n' +
             '</svg>'
     }
@@ -83,23 +79,27 @@ $(document).ready(function () {
     $("#Searchbar").keyup(function(event) {
         if (event.keyCode === 13) {
             $("#search-addon").click();
-            console.log(" updated");
         }
     });
     $("#search-addon").click(function ()
     {
-        let radioOption = document.querySelector('input[name="inlineRadioOptions"]:checked').value;
-        let searchBarValue = document.getElementById("Searchbar").value;
-        if (radioOption !== null) {
-            // Radio button is checked, access its value
-            console.log("Selected option: " + radioOption);
-            $.get('search_' + radioOption + '/' + searchBarValue, function (data, status) {
-                books= data;
-                displayBooks(filterList('checkBoxGenre'));
-            });
+        if (document.querySelector('input[name="inlineRadioOptions"]:checked') !== null) {
+            console.log(document.getElementById("Searchbar"));
+            if(document.getElementById("Searchbar").value !== "") {
+                let radioOption = document.querySelector('input[name="inlineRadioOptions"]:checked').value;
+                let searchBarValue = document.getElementById("Searchbar").value;
+                // Radio button is checked, access its value
+                console.log("niet null maar fout")
+                $.get('search_' + radioOption + '/' + searchBarValue, function (data, status) {
+                    books = data;
+                    displayBooks(filterList('checkBoxGenre'));
+                });
+            }
+            else{
+                alert("Please specify what you want to search for")
+            }
         } else {
-            // No radio button is checked
-            console.log("No option selected");
+            alert("Please select by what attribute you want to search the book")
         }
     });
 });
@@ -113,8 +113,6 @@ $(document).ready(function () {
 
 function orderBooks(){
     let orderItem= document.getElementById("OrderDropDown").value;
-    console.log(orderItem);
-    console.log(books);
 
     if(orderItem==="name"){
         filteredBooks.sort((a, b) => {
@@ -147,7 +145,6 @@ function orderBooks(){
 
 $("#OrderDropDown").change(function() {
     orderBooks();
-    console.log(filteredBooks);
     displayBooks(filteredBooks);
 });
 
@@ -175,11 +172,9 @@ function filterList(checkboxName){
         values.push(el.value);
     });
     if(values.length!=0){
-        console.log("values isn't empty");
         filteredBooksTemp= books.filter(books => values.includes(books.genre) );
     }
     else{
-        console.log("values is empty");
         filteredBooksTemp= books;
     }
     if (dateRangeFrom==""){
@@ -194,6 +189,6 @@ function filterList(checkboxName){
     console.log(filteredBooks);
     orderBooks();
     return filteredBooksTemp;
-
 }
+
 
