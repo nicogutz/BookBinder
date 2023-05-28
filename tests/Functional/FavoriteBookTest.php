@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use App\Repository\UserRepository;
 use Symfony\Component\Panther\Client;
 use Symfony\Component\Panther\PantherTestCaseTrait;
+use Symfony\Component\Panther\DomCrawler\Crawler;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class FavoriteBookTest extends WebTestCase
 {
@@ -69,7 +71,8 @@ class FavoriteBookTest extends WebTestCase
         // Request a specific page , and test the favorite_button
         $crawler = $this->client->request('GET', '/book_info/2');
         $crawler->filter('#favorite_button')->click();
-        sleep(5);
+        sleep(1);
+
         // test if the user_book update
         $user = $this->userRepo->findOneBy(['username'=>'test']);
         $likedBooks = $user->getBooks();
@@ -78,8 +81,13 @@ class FavoriteBookTest extends WebTestCase
         $this->assertNotNull($likedBook, 'First liked book not found.');
         //verify the correct book
         $this->assertEquals(2,$likedBook->getId());
+        //Cancel Favorite
+        $crawler->filter('#favorite_button')->click();
+        sleep(1);
+
         //clean the database
         $this->cleanup();
+
     }
     private function cleanup()
     {
