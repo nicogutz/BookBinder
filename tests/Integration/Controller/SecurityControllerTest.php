@@ -30,8 +30,12 @@ class SecurityControllerTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '/login');
         $this->assertSelectorExists('h3','Log in');
-        $this->assertCount(1, $crawler->filter('input[name="username"]'));
-        $this->assertCount(1, $crawler->filter('input[name="password"]'));
+        $this->assertCount(1,
+            $crawler->filter('input[name="username"]'),
+            'Page should contain input username.');
+        $this->assertCount(1,
+            $crawler->filter('input[name="password"]'),
+            'Page should contain input password.');
     }
 
     /**
@@ -48,7 +52,9 @@ class SecurityControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $this->client->request('GET', '/');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('nav', 'test_user | Logout');
+        $this->assertSelectorTextContains('nav',
+            'test_user | Logout',
+            'Valid user should be able to login. ');
     }
 
     /**
@@ -57,7 +63,6 @@ class SecurityControllerTest extends WebTestCase
     public function testSubmitInvalidUsername():void
     {
         $this->client->request('GET', '/login');
-        $test_user = $this->userRepo->findOneBy(['username' => 'test_user']);
         $crawler = $this->client->getCrawler();
         $form = $crawler->filter('form[method="post"]')->form();
         $form['username'] = 'wrong_user';
@@ -65,7 +70,9 @@ class SecurityControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $this->client->request('GET', '/');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('nav', 'Login');
+        $this->assertSelectorTextContains('nav',
+            'Login',
+            'Invalid user should not be able to log in.');
     }
 
     /**
@@ -82,6 +89,8 @@ class SecurityControllerTest extends WebTestCase
         $crawler = $this->client->submit($form);
         $this->client->request('GET', '/');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('nav', 'Login');
+        $this->assertSelectorTextContains('nav',
+            'Login',
+            'User should not be able to login with wrong password.');
     }
 }
