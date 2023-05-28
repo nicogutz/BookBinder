@@ -10,7 +10,20 @@ class UserRepositoryTest extends KernelTestCase
 {
     private $entityManager;
     private UserRepository|null $repository;
+
+    /**
+     * @return User
+     */
+    private function getUser(): User
+    {
+        $user = new User();
+        $user->setUsername('testuser')
+            ->setPassword('password');
+        return $user;
+    }
+
     protected function setUp(): void
+
     {
         $kernel = self::bootKernel();
         $this->assertSame('test', $kernel->getEnvironment());
@@ -25,9 +38,7 @@ class UserRepositoryTest extends KernelTestCase
      */
     public function testSaveUser(): void
     {
-        $user = new User();
-        $user->setUsername('testuser')
-            ->setPassword('password');
+        $user = $this->getUser();
         $this->repository->save($user);
         $this->entityManager->flush();
         $savedUser = $this->repository->findOneBy(['username' => $user->getUsername()]);
