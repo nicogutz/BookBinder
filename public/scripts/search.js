@@ -1,42 +1,48 @@
 let books;
 let filteredBooks;
+let currentPage = 1;
+let pageNav = 1;
+
+
+
+
+/*____________________________________DISPLAY BOOKS_______________________________________*/
 
 
     function displayBooks(filteredBooks) {
+        enableDisable();
         const bookList = document.querySelector('#bookList');
         bookList.innerHTML = '';
-        for (let i = 0; i < filteredBooks.length; i++) {
-            const book = filteredBooks[i];
-            if(book.subtitle== null){
-                book.subtitle = "No description available for this book";
+        for (let i = 0; i < 10; i++) {
+            if((i + (currentPage-1) * 10) > filteredBooks.length - 1){
+                break;
             }
-            const tr = document.createElement('tr');
+            else {
+                const book = filteredBooks[i + (currentPage - 1) * 10];
+                const tr = document.createElement('tr');
 
-            tr.innerHTML = `  
-        <td class="number text_center">${i+1}</td>
+                tr.innerHTML = `  
+        <td class="number text_center">${i + 1}</td>
         <td class="image is-4by3"><img src="${book.thumbnail}" alt=""></td>
         <td class="product w-75" ><strong>${book.title}</strong><br>${book.author}</td>
         <td class="rate text-right">${generateRatingStars(book.averageRating)}</td>
-        <td class="price text-right">${ "$" +book.price}</td>
+        <td class="price text-right">${"$" + book.price}</td>
     
     `;
-            tr.addEventListener('click', function () {
-                // Define the URL you want to navigate to
-                const newLink = '/book_info/'+book.id;
-                // Navigate to the new link
-                window.location.href = newLink;
-            });
-            bookList.appendChild(tr);
+                tr.addEventListener('click', function () {
+                    // Define the URL you want to navigate to
+                    // Navigate to the new link
+                    window.location.href = '/book_info/' + book.id;
+                });
+                bookList.appendChild(tr);
+
+
+            }
         }
     }
 
 
-
-
-
-
-
-
+/* STAR RATING */
 function generateRatingStars(ratingValue) {
     let temp= 0;
     let starsHTML = '';
@@ -74,6 +80,8 @@ function generateRatingStars(ratingValue) {
 
 
 
+/*____________________________________________SEARCH FUNCTIONALITY________________________________*/
+
 
 $(document).ready(function () {
     $("#Searchbar").keyup(function(event) {
@@ -84,16 +92,17 @@ $(document).ready(function () {
     $("#search-addon").click(function ()
     {
         if (document.querySelector('input[name="inlineRadioOptions"]:checked') !== null) {
-            console.log(document.getElementById("Searchbar"));
             if(document.getElementById("Searchbar").value !== "") {
                 let radioOption = document.querySelector('input[name="inlineRadioOptions"]:checked').value;
                 let searchBarValue = document.getElementById("Searchbar").value;
                 // Radio button is checked, access its value
-                console.log("niet null maar fout")
                 $.get('search_' + radioOption + '/' + searchBarValue, function (data, status) {
                     books = data;
                     displayBooks(filterList('checkBoxGenre'));
                 });
+                let searchInfo = document.getElementById("searchInfo");
+                searchInfo.innerText="Searching all results matching: " + searchBarValue;
+                searchInfo.classList.remove("invisible");
             }
             else{
                 alert("Please specify what you want to search for")
@@ -105,12 +114,26 @@ $(document).ready(function () {
 });
 
 
-/* ORDER FUNCTION */
-$(document).ready(function () {
-    let orderItemComparison= document.querySelector('#OrderDropDown option[selected="selected"]').value;
+
+
+
+
+
+
+/*________________________________________ORDER FUNCTION_____________________________________*/
+
+
+
+/* ORDER BUTTON */
+$("#OrderDropDown").change(function() {
+    orderBooks();
+    pageReset();
+    currentPage=1;
+    displayBooks(filteredBooks);
 });
 
 
+/* FUNCTIONALITY */
 function orderBooks(){
     let orderItem= document.getElementById("OrderDropDown").value;
 
@@ -143,25 +166,33 @@ function orderBooks(){
 
 }
 
-$("#OrderDropDown").change(function() {
-    orderBooks();
-    displayBooks(filteredBooks);
-});
 
+
+
+
+
+
+
+
+/*__________________________________________FILTER FUNCTION__________________________________*/
 
 
 /* FILTER BUTTON */
 $('#filterButton').click(function(){
     displayBooks(filterList('checkBoxGenre'));
 });
-/* FILTER SPECIFICATIONS*/
 
+
+/* FILTER SPECIFICATIONS*/
 function changePrice(val){
     document.getElementById("range").innerHTML= "$"+val;
 }
 
+
 /* FILTER */
 function filterList(checkboxName){
+    currentPage = 1;
+    pageReset();
     let filteredBooksTemp;
     let dateRangeFrom= document.getElementById("dateFilterFrom").value;
     let dateRangeTo= document.getElementById("dateFilterTo").value;
@@ -186,9 +217,98 @@ function filterList(checkboxName){
     filteredBooksTemp= filteredBooksTemp.filter(filteredBooksTemp => filteredBooksTemp.price <= priceRange);
     filteredBooksTemp= filteredBooksTemp.filter(filteredBooksTemp =>filteredBooksTemp.year >= dateRangeFrom && filteredBooksTemp.year <=dateRangeTo);
     filteredBooks=filteredBooksTemp;
-    console.log(filteredBooks);
     orderBooks();
     return filteredBooksTemp;
 }
 
 
+
+
+
+
+
+/*______________________________________PAGINATION______________________________________*/
+
+/* SAVE CURRENT PAGE */
+$(document).ready(function () {
+    let temp = document.querySelectorAll("#p-link-1, #p-link-2, #p-link-3");
+    $(temp).click(function (){
+        let page = parseInt(this.innerText);
+    if (currentPage !== page) {
+        currentPage = page;
+        displayBooks(filteredBooks);
+    }
+    })
+});
+
+
+/*  CHANGE NUMBERS */
+$(document).ready(function() {
+    $("#nextPage").click(function () {
+        if(document.getElementById("p-link-1").innerText == 1){
+            document.getElementById("liPreviousPage").classList.remove("disabled");
+        }
+        let pageLinks = document.querySelectorAll("#p-link-1, #p-link-2, #p-link-3");
+        pageLinks.forEach((link) => {
+            let pageNumber = parseInt(link.innerText);
+            link.innerText = pageNumber + 3;
+            if (link.innerText == Math.ceil(filteredBooks.length/10)){
+                document.getElementById("liNextPage").classList.add("disabled");
+            }
+            else if (link.innerText > Math.floor(filteredBooks.length/10)){
+                link.style.visibility = "hidden";
+            }
+        });
+    });
+});
+
+
+$(document).ready(function() {
+    $("#previousPage").click(function () {
+        let pLink1 = document.getElementById("p-link-1");
+        let pageNumber = parseInt(pLink1.innerText);
+        pLink1.innerText = pageNumber - 3;
+        let pLink2 = document.getElementById("p-link-2");
+        pLink2.innerText = parseInt(pLink1.innerText) + 1;
+        pLink2.style.visibility = "visible";
+        let pLink3 = document.getElementById("p-link-3");
+        pLink3.innerText = parseInt(pLink1.innerText) + 2;
+        pLink3.style.visibility = "visible";
+        if(document.getElementById("p-link-1").innerText == 1){
+            document.getElementById("liPreviousPage").classList.add("disabled");
+        }
+        document.getElementById("liNextPage").classList.remove("disabled");
+    });
+});
+
+
+/* ENABLING/DISABLING PREVIOUS/NEXT BUTTON */
+function enableDisable() {
+    let pageLinks = document.querySelectorAll("#p-link-1, #p-link-2, #p-link-3");
+    pageLinks.forEach((link) => {
+        link.style.visibility= "visible";
+        if (link.innerText == Math.ceil(filteredBooks.length/10)){
+            document.getElementById("liNextPage").classList.add("disabled");
+        }
+        else if (link.innerText > Math.ceil(filteredBooks.length/10)){
+            link.style.visibility = "hidden";
+        }
+    });
+    if(document.getElementById("p-link-3").innerText < (filteredBooks.length/10) && document.getElementById("p-link-3").innerText !== ""){
+        document.getElementById("liNextPage").classList.remove("disabled");
+    }
+    if(document.getElementById("p-link-1").innerText == 1) {
+        document.getElementById("liPreviousPage").classList.add("disabled");
+    }
+}
+
+
+/* PAGE 1 RESET*/
+function pageReset(){
+    let pLink1 = document.getElementById("p-link-1");
+    pLink1.innerText = 1;
+    let pLink2 = document.getElementById("p-link-2");
+    pLink2.innerText = 2;
+    let pLink3 = document.getElementById("p-link-3");
+    pLink3.innerText = 3;
+}
