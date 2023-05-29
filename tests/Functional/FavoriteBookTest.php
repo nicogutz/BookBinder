@@ -19,7 +19,7 @@ class FavoriteBookTest extends WebTestCase
     protected function setUp(): void
     {
         $kernel = self::bootKernel();
-        // 获取数据库连接或使用应用程序提供的服务来访问数据库
+        // Obtain database connection
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
@@ -93,7 +93,7 @@ class FavoriteBookTest extends WebTestCase
     {
         $user = $this->userRepo->findOneBy(['username' => 'test']);
         if ($user) {
-            // 获取用户喜欢的书籍
+            // get user favorite books
             $attachedUser = $this->entityManager->merge($user);
             $this->entityManager->remove($attachedUser);
             $this->entityManager->flush();
