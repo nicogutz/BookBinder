@@ -196,6 +196,13 @@ class SearchTest extends PantherTestCase
         $this->assertSelectorTextContains('#bookList', 'Diablo Moon of the Spider');
     }
 
+    /**
+     * @depends testFilterByGenre
+     * @depends testFilterByPrice
+     * @depends testFilterByYear
+     * @depends testSearchByAuthor
+     * @depends testSearchByISBN
+     */
     public function testSearchWithInvalidInput(): void
     {
         $client = static::createPantherClient();
@@ -242,6 +249,9 @@ class SearchTest extends PantherTestCase
         $this->assertCount(0,$books);
     }
 
+    /**
+     * @depends testSearchByTitle
+     */
     public function testRedirectToBookInfo(): void
     {
         list($client, $crawler) = $this->searchBookWithTitleSpider();
