@@ -93,4 +93,23 @@ class SecurityControllerTest extends WebTestCase
             'Login',
             'User should not be able to login with wrong password.');
     }
+
+    /**
+     * @depends testSubmitValidData
+     */
+    public function testAdminLogin():void
+    {
+        $this->client->request('GET', '/login');
+        $test_user = $this->userRepo->findOneBy(['username' => 'admin']);
+        $crawler = $this->client->getCrawler();
+        $form = $crawler->filter('form[method="post"]')->form();
+        $form['username'] = 'admin';
+        $form['password'] = 'password';
+        $crawler = $this->client->submit($form);
+        $this->client->request('GET', '/');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('nav',
+            'Admin',
+            'Valid admin should be able to login. ');
+    }
 }
