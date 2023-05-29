@@ -109,7 +109,7 @@
   </span>
                                 </div>
                                 <!-- END SEARCH INPUT -->
-                                <p>Showing all results matching "web development"</p>
+                                <p id="searchInfo" class="invisible">Showing all results matching "web development"</p>
 
                                 <div class="padding"></div>
 
@@ -142,15 +142,15 @@
                                 <!-- BEGIN PAGINATION -->
                                 <nav aria-label="pagination">
                                     <ul class="pagination justify-content-center">
-                                        <li class="page-item disabled">
-                                            <a class="page-link" href="#" tabindex="-1"
-                                               aria-disabled="true">Previous</a>
+                                        <li id="liPreviousPage" class="page-item disabled">
+                                            <a id= "previousPage" class="page-link" href="#" tabindex="-1"
+                                              >Previous</a>
                                         </li>
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#">Next</a>
+                                        <li class="page-item"><a id="p-link-1" class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a id="p-link-2" class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a id="p-link-3" class="page-link" href="#">3</a></li>
+                                        <li id="liNextPage" class="page-item disabled">
+                                            <a id="nextPage" class="page-link" href="#">Next</a>
                                         </li>
                                     </ul>
                                 </nav>

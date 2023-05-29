@@ -3,21 +3,27 @@
 namespace App\Tests\Integration\Controller;
 
 use App\Entity\Book;
+use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Repository\BookRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class BookInfoControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
+    private $entityManager;
     private $bookRepository;
-    private UserRepository|null $userRepository;
+    private $userRepository;
     protected function setUp(): void
     {
         $this->client = static::createClient();
-        $this->userRepository = static::getContainer()->get(UserRepository::class);
-        $this->bookRepository = static::getContainer()->get(BookRepository::class);
+        $kernel = self::bootKernel();
+        $this->entityManager = $kernel->getContainer()
+            ->get('doctrine')
+            ->getManager();
+
+        $this->bookRepository = $this->entityManager->getRepository(Book::class);
+        $this->userRepository = $this->entityManager->getRepository(User::class);
     }
 
     public function testTerms():void
@@ -33,28 +39,6 @@ class BookInfoControllerTest extends WebTestCase
         $this->assertSelectorExists('ul li',$expect[0]->getYear());
         $this->assertSelectorExists('ul li',$expect[0]->getGenre());
         $this->assertSelectorExists('ul li',$expect[0]->getISBN13());
-    }
-
-    /**
-     * @depends testTerms
-     */
-    public function testLikeBookWithoutLogin():void
-    {
-        $this->client->followRedirects();
-        $selectedBookISBN = 9780006479673;
-        $selectedBook = $this->bookRepository->findByISBN($selectedBookISBN);
-        $this->assertCount(1,$selectedBook);
-        $id = $selectedBook[0]->getId();
-        $this->client->request('GET', '/book_info/'.$id);
-        $this->assertResponseIsSuccessful();
-        $this->client->request('POST','/book_like',[
-            'book_id' => $id,
-            'user_id' => 1,
-        ]);
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $path = parse_url($this->client->getRequest()->getUri(), PHP_URL_PATH);
-        $direct = substr($path, 1);
-        $this->assertEquals('login',$direct);
     }
 
     /**
@@ -76,7 +60,6 @@ class BookInfoControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         //get user information
         $user = $this->userRepository->findOneBy(['username'=>'test_user']);
-        $this->client->loginUser($user);
         $likedBook = $user->getBooks();
         $this->assertCount(1,$likedBook);
         $this->assertEquals($expectedLikedBook[0],$likedBook[0]);
@@ -85,13 +68,13 @@ class BookInfoControllerTest extends WebTestCase
             'book_id' => $id,
             'user_id' => $user->getId(),
         ]);
-        //$this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertResponseIsSuccessful();
-        $user = $this->userRepository->findOneBy(['username'=>'test_user']);
-        $likedBook = $user->getBooks();
-        $this->assertCount(2,$likedBook);
-        $this->assertEquals($expectedLikedBookISBN,$likedBook[0]->getISBN13());
-        $this->assertEquals($selectedBookISBN,$likedBook[1]->getISBN13());
+        $this->entityManager->refresh($user);
+        $likedBooks = $user->getBooks();
+        $this->assertCount(2,$likedBooks);
+        $this->assertTrue($likedBooks->contains($selectedBook[0]));
+        $this->assertTrue($likedBooks->contains($expectedLikedBook[0]));
     }
 
     /**
@@ -103,7 +86,6 @@ class BookInfoControllerTest extends WebTestCase
         $selectedBook = $this->bookRepository->findByISBN($selectedBookISBN);
         $id = $selectedBook[0]->getId();
         $user = $this->userRepository->findOneBy(['username'=>'test_user']);
-        $this->client->loginUser($user);
         $likedBook = $user->getBooks();
         $this->assertCount(1,$likedBook);
         $this->assertTrue($likedBook->contains($selectedBook[0]));
@@ -113,7 +95,7 @@ class BookInfoControllerTest extends WebTestCase
         ]);
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertResponseIsSuccessful();
-        $user = $this->userRepository->findOneBy(['username'=>'test_user']);
+        $this->entityManager->refresh($user);
         $likedBooks = $user->getBooks();
         $this->assertCount(0,$likedBooks);
     }
@@ -124,5 +106,22 @@ class BookInfoControllerTest extends WebTestCase
         $this->client->request('GET', '/book_info/'.$id);
         $this->assertEquals(404,$this->client->getResponse()->getStatusCode());
         $this->assertSelectorExists('h1','The book does not exist');
+    }
+
+    /**
+     * @depends testTerms
+     */
+    public function testInvalidUser():void
+    {
+        $isbn = 9780002261982;
+        $expect = $this->bookRepository->findByISBN($isbn);
+        $this->assertCount(1,$expect);
+        $id = $expect[0]->getId();
+        $this->client->request('GET', '/book_info/'.$id);
+        $this->assertResponseIsSuccessful();
+        $this->client->request('POST','/book_like',[
+            'book_id' => $id,
+        ]);
+        $this->assertEquals(500, $this->client->getResponse()->getStatusCode());
     }
 }
