@@ -97,7 +97,7 @@ class FilterTest extends PantherTestCase
      */
     private function searchBookWithTitleSpider(): array
     {
-        $client = static::createPantherClient();
+        $client = static::createPantherClient(['port' => 9090]);
         $crawler = $client->request('GET', '/search');
         $crawler->filter('#radio_title')->click();
         $crawler->filter('#Searchbar')->sendKeys('spider');
