@@ -84,7 +84,6 @@ class FavoriteBookTest extends WebTestCase
         //Cancel Favorite
         $crawler->filter('#favorite_button')->click();
         sleep(1);
-
         //clean the database
         $this->cleanup();
 
