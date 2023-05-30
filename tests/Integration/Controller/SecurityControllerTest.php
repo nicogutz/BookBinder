@@ -2,7 +2,6 @@
 
 namespace App\Tests\Integration\Controller;
 
-use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -31,8 +30,12 @@ class SecurityControllerTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '/login');
         $this->assertSelectorExists('h3','Log in');
-        $this->assertCount(1, $crawler->filter('input[name="username"]'));
-        $this->assertCount(1, $crawler->filter('input[name="password"]'));
+        $this->assertCount(1,
+            $crawler->filter('input[name="username"]'),
+            'Page should contain input username.');
+        $this->assertCount(1,
+            $crawler->filter('input[name="password"]'),
+            'Page should contain input password.');
     }
 
     /**
@@ -42,9 +45,71 @@ class SecurityControllerTest extends WebTestCase
     {
         $this->client->request('GET', '/login');
         $test_user = $this->userRepo->findOneBy(['username' => 'test_user']);
-        $this->client->loginUser($test_user);
+        $crawler = $this->client->getCrawler();
+        $form = $crawler->filter('form[method="post"]')->form();
+        $form['username'] = 'test_user';
+        $form['password'] = 'password';
+        $crawler = $this->client->submit($form);
         $this->client->request('GET', '/');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('nav', 'test_user | Logout');
+        $this->assertSelectorTextContains('nav',
+            'test_user | Logout',
+            'Valid user should be able to login. ');
+    }
+
+    /**
+     * @depends testSubmitValidData
+     */
+    public function testSubmitInvalidUsername():void
+    {
+        $this->client->request('GET', '/login');
+        $crawler = $this->client->getCrawler();
+        $form = $crawler->filter('form[method="post"]')->form();
+        $form['username'] = 'wrong_user';
+        $form['password'] = 'password';
+        $crawler = $this->client->submit($form);
+        $this->client->request('GET', '/');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('nav',
+            'Login',
+            'Invalid user should not be able to log in.');
+    }
+
+    /**
+     * @depends testSubmitValidData
+     */
+    public function testSubmitInvalidPassword():void
+    {
+        $this->client->request('GET', '/login');
+        $test_user = $this->userRepo->findOneBy(['username' => 'test_user']);
+        $crawler = $this->client->getCrawler();
+        $form = $crawler->filter('form[method="post"]')->form();
+        $form['username'] = 'test_user';
+        $form['password'] = 'wrongpassword';
+        $crawler = $this->client->submit($form);
+        $this->client->request('GET', '/');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('nav',
+            'Login',
+            'User should not be able to login with wrong password.');
+    }
+
+    /**
+     * @depends testSubmitValidData
+     */
+    public function testAdminLogin():void
+    {
+        $this->client->request('GET', '/login');
+        $test_user = $this->userRepo->findOneBy(['username' => 'admin']);
+        $crawler = $this->client->getCrawler();
+        $form = $crawler->filter('form[method="post"]')->form();
+        $form['username'] = 'admin';
+        $form['password'] = 'password';
+        $crawler = $this->client->submit($form);
+        $this->client->request('GET', '/');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('nav',
+            'Admin',
+            'Valid admin should be able to login. ');
     }
 }
