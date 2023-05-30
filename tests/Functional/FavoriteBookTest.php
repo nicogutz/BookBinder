@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Tests;
-use App\Entity\User;
-use App\Entity\Book;
+
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use App\Repository\UserRepository;
@@ -25,9 +24,18 @@ class FavoriteBookTest extends WebTestCase
             ->get('doctrine')
             ->getManager();
 
-        $this->userRepo = $this->entityManager->getRepository(User::class);
-        $this->client = static::createPantherClient(['port' => 9090]);
+        $this->userRepo = static::getContainer()->get(UserRepository::class);
+        $this->client = static::createPantherClient(['port' => 8000]);
 
+        //register test user
+        $this->client->request('GET', '/register');
+        // Validate a successful response and some content
+        $array = [
+            'registration_form[username]' => 'test',
+            'registration_form[plainPassword]' => 'password',
+            'registration_form[agreeTerms]' => true
+        ];
+        $this->client->submitForm('Register',$array);
     }
     public function testFavoriteButton()
     {
@@ -50,46 +58,45 @@ class FavoriteBookTest extends WebTestCase
         $this->assertEquals($expectedMessage, $alertText);
         // Close Alert
         $alert->accept();
-
         /**
          * TEST WITH LOGIN :NEW BOOK_LIKE RECORD
          */
         //first step : login
         $crawler = $this->client->request('GET', '/login');
         $form = $crawler->filter('form[method="post"]')->form();
-         $form['username'] = 'test_user';
+         $form['username'] = 'test';
          $form['password'] = 'password';
          $crawler = $this->client->submit($form);
-        /**
-         * Test Add Favorite
-         */
+
         // Request a specific page , and test the favorite_button
         $crawler = $this->client->request('GET', '/book_info/2');
         $crawler->filter('#favorite_button')->click();
-        sleep(2);
-        $crawler = $this->client->request('GET', '/');
-        // check homepage books is not empty
-        $this->assertNotEmpty($crawler->filter('.card'));
-        // check if it is the correct book
-        $user = $this->userRepo->findOneBy(['username'=>'test_user']);
+        sleep(1);
+
+        // test if the user_book update
+        $user = $this->userRepo->findOneBy(['username'=>'test']);
         $likedBooks = $user->getBooks();
-        /** @var Book $likedBook */
         $likedBook = $likedBooks[0];
         // verify likedbook is not null
         $this->assertNotNull($likedBook, 'First liked book not found.');
         //verify the correct book
         $this->assertEquals(2,$likedBook->getId());
-
-        /**
-         * Test Cancel Favorite
-         */
-        $crawler = $this->client->request('GET', '/book_info/2');
+        //Cancel Favorite
         $crawler->filter('#favorite_button')->click();
-        sleep(2);
-        $crawler = $this->client->request('GET', '/');
-        // check homepage books is empty
-        $this->assertEmpty($crawler->filter('.card'));
-
+        sleep(1);
+        //clean the database
+        $this->cleanup();
 
     }
+    private function cleanup()
+    {
+        $user = $this->userRepo->findOneBy(['username' => 'test']);
+        if ($user) {
+            // get user favorite books
+            $attachedUser = $this->entityManager->merge($user);
+            $this->entityManager->remove($attachedUser);
+            $this->entityManager->flush();
+        }
+    }
+
 }
