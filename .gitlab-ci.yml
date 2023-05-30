@@ -15,6 +15,9 @@ before_script:
     - apk add rsync
     # Every job will start a container with a clone from the current repo
     - docker-php-ext-install pdo pdo_mysql
+    - apk add chromium chromium-chromedriver
+    - export PANTHER_NO_SANDBOX=1
+
     
 stages:
     - test
@@ -38,8 +41,6 @@ test-job:
         DATABASE_URL: "mysql://root:pass@mysql/main"
     script:
         - composer install
-        - apk add chromium chromium-chromedriver
-        - export PANTHER_NO_SANDBOX=1
         # run the migration on the temporary database
         - php bin/console debug:container --env-vars
         - php bin/console doctrine:migrations:migrate --env=test
