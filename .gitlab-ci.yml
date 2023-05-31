@@ -39,6 +39,15 @@ test-build:
     services:
         # a container with a temporary mysql db for running unit tests
         - mysql:8
+    variables:
+        # environment variables for configuring the mysql test database container
+        MYSQL_DATABASE: main_test
+        MYSQL_USER: user
+        MYSQL_ROOT_PASSWORD: pass
+        MYSQL_PASSWORD: pass
+        PANTHER_APP_ENV: test
+        # set the correct DSN in Symfony to connect to the temporary database
+        DATABASE_URL: "mysql://root:pass@mysql/main"
     script:
         - echo "MYSQL_DATABASE=main_test" >> build.env
         - echo "MYSQL_USER=ueser" >> build.env
