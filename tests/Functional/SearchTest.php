@@ -173,7 +173,7 @@ class SearchTest extends PantherTestCase
         $crawler->filter('#Searchbar')->sendKeys('1982');
         $crawler->filter('#search-addon')->click();
         //$client->waitForElementToContain('#bookList', 'Strangers on a Train', 200);
-        sleep(2);
+        sleep(10);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(3, $books);
         $crawler->filter('#dateFilterFrom')->sendKeys('5496%&*&');
@@ -216,7 +216,7 @@ class SearchTest extends PantherTestCase
     {
         list($client, $crawler) = $this->searchBookWithTitleSpider();
         //$client->waitForElementToContain('#bookList', 'Spiders Web', 200);
-        sleep(10);
+        sleep(2);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(4, $books);
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
