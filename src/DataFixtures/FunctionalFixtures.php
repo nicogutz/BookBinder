@@ -14,6 +14,14 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class FunctionalFixtures extends Fixture implements FixtureGroupInterface, OrderedFixtureInterface
 {
+    private UserPasswordHasherInterface $passwordHasher;
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager)
+    {
+        $this->passwordHasher = $passwordHasher;
+        $this->entityManager = $entityManager;
+    }
 
     public static function getGroups(): array
     {
@@ -110,6 +118,29 @@ class FunctionalFixtures extends Fixture implements FixtureGroupInterface, Order
         $liars->setPrice('99.84');
         $liars->setGenre('action_adventure');
         $manager->persist($liars);
+
+        $user = new User();
+        $book = $this->entityManager->getRepository(Book::class)->findByTitle('Spiders Web');
+        $user->setUsername('test_user');
+        $hashedPassword = $this->passwordHasher->hashPassword($user, 'password');
+        $user->setPassword($hashedPassword);
+        $user->addBook($book[0]);
+        $manager->persist($user);
+
+        $user = new User();
+        $user->setUsername('user');
+        $hashedPassword = $this->passwordHasher->hashPassword($user, 'password');
+        $user->setPassword($hashedPassword);
+        $manager->persist($user);
+
+        $user = new User();
+        $user->setUsername('admin');
+        $user->setRoles(['ROLE_ADMIN']);
+        $hashedPassword = $this->passwordHasher->hashPassword($user, 'password');
+        $user->setPassword($hashedPassword);
+        $manager->persist($user);
+
+
         $manager->flush();
     }
 

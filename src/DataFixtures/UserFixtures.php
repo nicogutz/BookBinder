@@ -25,7 +25,7 @@ class UserFixtures extends Fixture implements FixtureGroupInterface, OrderedFixt
 
     public static function getGroups():array
     {
-        return ['group1', 'group2'];
+        return ['group1'];
     }
 
     /**
@@ -59,8 +59,4 @@ class UserFixtures extends Fixture implements FixtureGroupInterface, OrderedFixt
         $manager->flush();
     }
 
-    public function getOrder()
-    {
-        return 2;
-    }
 }
