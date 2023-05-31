@@ -36,8 +36,6 @@ test-build:
             - vendor/
         reports:
             dotenv: build.env
-    services:
-        - mysql:8
     script:
         - echo "MYSQL_DATABASE=main_test" >> build.env
         - echo "MYSQL_USER=ueser" >> build.env
