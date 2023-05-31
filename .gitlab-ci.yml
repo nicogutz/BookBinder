@@ -38,6 +38,8 @@ test-build:
         - composer install
 
 test-unit:
+    only:
+        - master
     stage: test
     needs:
         job: test-build
@@ -46,6 +48,8 @@ test-unit:
         - php bin/phpunit tests/Unit
 
 test-integration:
+    only:
+        - master
     stage: test
     services:
         - mysql:8
@@ -65,6 +69,8 @@ test-integration:
         - php bin/phpunit tests/Integration
 
 test-functional:
+    only:
+        - master
     stage: test
     services:
         - mysql:8
@@ -97,7 +103,7 @@ deploy-job:
         DATABASE_URL: "$SECRET_DATABASE_URL"
         APP_ENV: "prod"
     script:
-        - composer install --no-dev --no-autoloader
+        - composer install --no-dev
         # rsync is a copy/sync tool we use to copy the current folder ./ to studev
         # we ignore the .git folder and the .env file
         # we delete the files on the remote server that are not present in the local copy
