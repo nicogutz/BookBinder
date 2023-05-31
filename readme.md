@@ -51,5 +51,9 @@ To migrate to test env:
  Execute the test: 
 >php bin/phpunit path
 
+ DAMA 
+>php bin/console --env=test doctrine:fixtures:load --append -n
+
+
  To query the database:
 > symfony console doctrine:query:sql "SELECT * FROM vinyl_mix"
