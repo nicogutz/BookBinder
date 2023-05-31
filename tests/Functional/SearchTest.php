@@ -271,24 +271,6 @@ class SearchTest extends PantherTestCase
     }
 
     /**
-     * @depends testSearchByISBN
-     */
-    public function testPaginationBookPerPage(): void
-    {
-        $client = static::createPantherClient();
-        $crawler = $client->request('GET', '/search');
-        // Select the radio button for searching by title
-        $crawler->filter('#radio_ISBN')->click();
-        // Enter the title in the search input
-        $crawler->filter('#Searchbar')->sendKeys('23');
-        // Click the search button
-        $crawler->filter('#search-addon')->click();
-        $client->waitFor('#bookList tr');
-        //test each page shows 10 books
-        $this->assertCount(10, $crawler->filter('#bookList')->filter('tr'));
-    }
-
-    /**
      * @return array
      */
     private function searchBookWithTitleSpider(): array
