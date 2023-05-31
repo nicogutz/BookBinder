@@ -53,11 +53,6 @@ test-build:
         - echo "PANTHER_APP_ENV=test" >> build.env
         - echo "DATABASE_URL=mysql://root:pass@mysql/main" >> build.env
         - composer install
-        # run the migration on the temporary database
-        - php bin/console doctrine:migrations:migrate --env=test
-        # load some test data in the temporary database
-        - php bin/console --env=test doctrine:fixtures:load --append -n 
-        # run the tests (using the temporary database)
 
 test-unit:
     stage: test
@@ -75,6 +70,8 @@ test-integration:
         job: test-build
         artifacts: true
     script:
+        - php bin/console doctrine:migrations:migrate --env=test
+        - php bin/console --env=test doctrine:fixtures:load --append -n 
         - php bin/phpunit tests/Integration
 
 test-functional:
@@ -85,6 +82,8 @@ test-functional:
         job: test-build
         artifacts: true
     script:
+        - php bin/console doctrine:migrations:migrate --env=test
+        - php bin/console --env=test doctrine:fixtures:load --append -n 
         - php bin/phpunit tests/Functional
 
 deploy-job:
