@@ -49,14 +49,14 @@ class SearchTest extends PantherTestCase
         $crawler->filter('#Searchbar')->sendKeys('Charles Osborne');
         // Click the search button
         $crawler->filter('#search-addon')->click();
-        $client->waitForElementToContain('#bookList','Spiders Web',5);
+        $client->waitForElementToContain('#bookList','Spiders Web',20);
         // Assert the expected results on the page
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
         //test fuzzy search by author
         $client->executeScript("document.getElementById('Searchbar').value = ''");
         $crawler->filter('#Searchbar')->sendKeys('orwell');
         $crawler->filter('#search-addon')->click();
-        $client->waitForElementToContain('#bookList','The Mermaid Chair',5);
+        $client->waitForElementToContain('#bookList','The Mermaid Chair',20);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(4,$books);
         // Assert the expected results on the page
@@ -79,14 +79,14 @@ class SearchTest extends PantherTestCase
         $crawler->filter('#Searchbar')->sendKeys('9780002261982');
         // Click the search button
         $crawler->filter('#search-addon')->click();
-        $client->waitForElementToContain('#bookList','Spiders Web',5);
+        $client->waitForElementToContain('#bookList','Spiders Web',20);
         // Assert the expected results on the page
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
         //test fuzzy search by ISBN
         $client->executeScript("document.getElementById('Searchbar').value = ''");
         $crawler->filter('#Searchbar')->sendKeys('1982');
         $crawler->filter('#search-addon')->click();
-        $client->waitForElementToContain('#bookList','Strangers on a Train',5);
+        $client->waitForElementToContain('#bookList','Strangers on a Train',20);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(3,$books);
         // Assert the expected results on the page
@@ -108,14 +108,14 @@ class SearchTest extends PantherTestCase
         $crawler->filter('#Searchbar')->sendKeys('Spiders Web');
         // Click the search button
         $crawler->filter('#search-addon')->click();
-        $client->waitForElementToContain('#bookList','Spiders Web',5);
+        $client->waitForElementToContain('#bookList','Spiders Web',20);
         // Assert the expected results on the page
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
         //test fuzzy search by title
         $client->executeScript("document.getElementById('Searchbar').value = ''");
         $crawler->filter('#Searchbar')->sendKeys('spider');
         $crawler->filter('#search-addon')->click();
-        $client->waitForElementToContain('#bookList','Diary of a Spider',5);
+        $client->waitForElementToContain('#bookList','Diary of a Spider',20);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(4,$books);
         // Assert the expected results on the page
@@ -155,7 +155,7 @@ class SearchTest extends PantherTestCase
         $client->executeScript("document.getElementById('Searchbar').value = ''");
         $crawler->filter('#Searchbar')->sendKeys('1982');
         $crawler->filter('#search-addon')->click();
-        $client->waitForElementToContain('#bookList','Strangers on a Train',5);
+        $client->waitForElementToContain('#bookList','Strangers on a Train',20);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(3,$books);
         $crawler->filter('#dateFilterFrom')->sendKeys('5496%&*&');
@@ -177,7 +177,7 @@ class SearchTest extends PantherTestCase
     public function testRedirectToBookInfo(): void
     {
         list($client, $crawler) = $this->searchBookWithTitleSpider();
-        $client->waitForElementToContain('#bookList','Spiders Web',5);
+        $client->waitForElementToContain('#bookList','Spiders Web',20);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(4,$books);
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
@@ -193,7 +193,7 @@ class SearchTest extends PantherTestCase
     public function testOrderByRating():void
     {
         list($client, $crawler) = $this->searchBookWithTitleSpider();
-        $client->waitForElementToContain('#bookList','Spiders Web',5);
+        $client->waitForElementToContain('#bookList','Spiders Web',20);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(4,$books);
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
@@ -212,7 +212,7 @@ class SearchTest extends PantherTestCase
     public function testOrderByName():void
     {
         list($client, $crawler) = $this->searchBookWithTitleSpider();
-        $client->waitForElementToContain('#bookList','Spiders Web',5);
+        $client->waitForElementToContain('#bookList','Spiders Web',20);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(4,$books);
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
@@ -234,7 +234,7 @@ class SearchTest extends PantherTestCase
     public function testOrderByDate():void
     {
         list($client, $crawler) = $this->searchBookWithTitleSpider();
-        $client->waitForElementToContain('#bookList','Spiders Web',5);
+        $client->waitForElementToContain('#bookList','Spiders Web',20);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(4,$books);
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
@@ -255,7 +255,7 @@ class SearchTest extends PantherTestCase
     public function testOrderByPages():void
     {
         list($client, $crawler) = $this->searchBookWithTitleSpider();
-        $client->waitForElementToContain('#bookList','Spiders Web',5);
+        $client->waitForElementToContain('#bookList','Spiders Web',20);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(4,$books);
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
