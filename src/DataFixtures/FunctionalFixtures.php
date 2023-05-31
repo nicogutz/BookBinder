@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class FunctionalFixtures extends Fixture implements FixtureGroupInterface, OrderedFixtureInterface
+class FunctionalFixtures extends Fixture implements FixtureGroupInterface
 {
     private UserPasswordHasherInterface $passwordHasher;
     private EntityManagerInterface $entityManager;
@@ -142,10 +142,5 @@ class FunctionalFixtures extends Fixture implements FixtureGroupInterface, Order
 
 
         $manager->flush();
-    }
-
-    public function getOrder()
-    {
-        return 1;
     }
 }
