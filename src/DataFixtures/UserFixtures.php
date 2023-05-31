@@ -34,23 +34,16 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
      */
     public function load(ObjectManager $manager)
     {
-        $this->createBooks($manager);
         $user = new User();
-        $book = $this->entityManager->getRepository(Book::class)->findByTitle('Spiders Web');
         $user->setUsername('test_user');
         $hashedPassword = $this->passwordHasher->hashPassword($user, 'password');
         $user->setPassword($hashedPassword);
-        $user->addBook($book[0]);
-        $this->setReference('group1',$user);
-        $this->setReference('group2',$user);
         $manager->persist($user);
 
         $user = new User();
         $user->setUsername('user');
         $hashedPassword = $this->passwordHasher->hashPassword($user, 'password');
         $user->setPassword($hashedPassword);
-        $this->setReference('group1',$user);
-        $this->setReference('group2',$user);
         $manager->persist($user);
 
         $user = new User();
@@ -58,93 +51,8 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
         $user->setRoles(['ROLE_ADMIN']);
         $hashedPassword = $this->passwordHasher->hashPassword($user, 'password');
         $user->setPassword($hashedPassword);
-        $this->setReference('group1',$user);
-        $this->setReference('group2',$user);
         $manager->persist($user);
 
         $manager->flush();
     }
-
-    public function createBooks(ObjectManager $manager): void
-    {
-        $spidersWeb = new Book();
-        $spidersWeb->setISBN13('9780002261982');
-        $spidersWeb->setTitle('Spiders Web');
-        $spidersWeb->setThumbnail('http://books.google.com/books/
-        content?id=gA5GPgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api');
-        $spidersWeb->setYear('2000');
-        $spidersWeb->setPageNumber('241');
-        $spidersWeb->setAverageRating('3.83');
-        $spidersWeb->setPrice('35.46');
-        $spidersWeb->setGenre('action_adventure');
-        $this->addReference('group1',$spidersWeb);
-        $this->addReference('group2',$spidersWeb);
-        $manager->persist($spidersWeb);
-
-        $spiderDiary = new Book();
-        $spiderDiary->setISBN13('9780060001537');
-        $spiderDiary->setTitle('Diary of a Spider');
-        $spiderDiary->setThumbnail('http://books.google.com/books/
-        content?id=UWvZo2pIhzMC&printsec=frontcover&img=1&zoom=1&source=gbs_api');
-        $spiderDiary->setYear('2005');
-        $spiderDiary->setPageNumber('40');
-        $spiderDiary->setAverageRating('4.25');
-        $spiderDiary->setPrice('73.31');
-        $spiderDiary->setGenre('fantasy');
-        $this->setReference('group2',$spiderDiary);
-        $manager->persist($spiderDiary);
-
-        $spidersHouse = new Book();
-        $spidersHouse->setISBN13('9780061137037');
-        $spidersHouse->setTitle('Spiders House');
-        $spidersHouse->setThumbnail('http://books.google.com/books/
-        content?id=3_jMWuT2OGEC&printsec=frontcover&img=1&zoom=1&source=gbs_api');
-        $spidersHouse->setYear('2006');
-        $spidersHouse->setPageNumber('432');
-        $spidersHouse->setAverageRating('4.03');
-        $spidersHouse->setPrice('11.03');
-        $spidersHouse->setGenre('action_adventure');
-        $this->setReference('group2',$spidersHouse);
-        $manager->persist($spidersHouse);
-
-        $spidersMoon = new Book();
-        $spidersMoon->setISBN13('9780743471329');
-        $spidersMoon->setTitle('Diablo Moon of the Spider');
-        $spidersMoon->setThumbnail('http://books.google.com/books/
-        content?id=GcY6PgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api');
-        $spidersMoon->setYear('2006');
-        $spidersMoon->setPageNumber('336');
-        $spidersMoon->setAverageRating('3.95');
-        $spidersMoon->setPrice('28.57');
-        $spidersMoon->setGenre('science_fiction');
-        $this->setReference('group2',$spidersMoon);
-        $manager->persist($spidersMoon);
-
-        $strangers = new Book();
-        $strangers->setISBN13('9780393321982');
-        $strangers->setTitle('Strangers on a Train');
-        $strangers->setThumbnail('http://books.google.com/books/
-        content?id=qbkfHZEygt4C&printsec=frontcover&img=1&zoom=1&source=gbs_api');
-        $strangers->setYear('2001');
-        $strangers->setPageNumber('256');
-        $strangers->setAverageRating('3.78');
-        $strangers->setPrice('38.8');
-        $strangers->setGenre('action_adventure');
-        $this->setReference('group2',$strangers);
-        $manager->persist($strangers);
-
-        $liars = new Book();
-        $liars->setISBN13('9780743261982');
-        $liars->setTitle('Liars and Saints');
-        $liars->setThumbnail('http://books.google.com/books/
-        content?id=lgcngkRJnhsC&printsec=frontcover&img=1&zoom=1&source=gbs_api');
-        $liars->setYear('2004');
-        $liars->setPageNumber('272');
-        $liars->setAverageRating('3.59');
-        $liars->setPrice('99.84');
-        $liars->setGenre('action_adventure');
-        $this->setReference('group2',$liars);
-        $manager->persist($liars);
-    }
-
 }
