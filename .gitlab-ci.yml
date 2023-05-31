@@ -20,6 +20,7 @@ before_script:
     - docker-php-ext-install pdo pdo_mysql
     - apk add chromium chromium-chromedriver
     - export PANTHER_NO_SANDBOX=1
+    - export SYMFONY_DEPRECATIONS_HELPER=weak
 
     
 stages:
