@@ -35,9 +35,11 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
     public function load(ObjectManager $manager)
     {
         $user = new User();
+        $book = $this->entityManager->getRepository(Book::class)->findByID(2);
         $user->setUsername('test_user');
         $hashedPassword = $this->passwordHasher->hashPassword($user, 'password');
         $user->setPassword($hashedPassword);
+        $user->addBook($book);
         $manager->persist($user);
 
         $user = new User();
