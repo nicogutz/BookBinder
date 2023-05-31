@@ -34,15 +34,7 @@ test-build:
     artifacts:
         paths:
             - vendor/
-        reports:
-            dotenv: build.env
     script:
-        - echo "MYSQL_DATABASE=main_test" >> build.env
-        - echo "MYSQL_USER=ueser" >> build.env
-        - echo "MYSQL_ROOT_PASSWORD=pass" >> build.env
-        - echo "MYSQL_PASSWORD=pass" >> build.env
-        - echo "PANTHER_APP_ENV=test" >> build.env
-        - echo "DATABASE_URL=mysql://root:pass@mysql/main" >> build.env
         - composer install
 
 test-unit:
@@ -60,6 +52,13 @@ test-integration:
     needs:
         job: test-build
         artifacts: true
+    variables:
+        MYSQL_DATABASE: main_test
+        MYSQL_USER: user
+        MYSQL_ROOT_PASSWORD: pass
+        MYSQL_PASSWORD: pass
+        PANTHER_APP_ENV: test
+        DATABASE_URL: "mysql://root:pass@mysql/main"
     script:
         - php bin/console doctrine:migrations:migrate --env=test
         - php bin/console --env=test doctrine:fixtures:load --append -n 
@@ -72,6 +71,13 @@ test-functional:
     needs:
         job: test-build
         artifacts: true
+    variables:
+        MYSQL_DATABASE: main_test
+        MYSQL_USER: user
+        MYSQL_ROOT_PASSWORD: pass
+        MYSQL_PASSWORD: pass
+        PANTHER_APP_ENV: test
+        DATABASE_URL: "mysql://root:pass@mysql/main"
     script:
         - php bin/console doctrine:migrations:migrate --env=test
         - php bin/console --env=test doctrine:fixtures:load --append -n 
@@ -90,7 +96,7 @@ deploy-job:
         DATABASE_URL: "$SECRET_DATABASE_URL"
         APP_ENV: "prod"
     script:
-        - composer install --no-dev
+        - composer install --no-dev --no-autoloader
         # rsync is a copy/sync tool we use to copy the current folder ./ to studev
         # we ignore the .git folder and the .env file
         # we delete the files on the remote server that are not present in the local copy
