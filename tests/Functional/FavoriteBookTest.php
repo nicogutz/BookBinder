@@ -64,7 +64,7 @@ class FavoriteBookTest extends WebTestCase
         $form['password'] = 'password';
         $crawler = $this->client->submit($form);
         /**
-         * Test Add Favorite
+         * Test Cancel Favorite
          */
         $crawler = $this->client->request('GET', '/');
         $this->assertNotEmpty($crawler->filter('.card'));
@@ -86,15 +86,13 @@ class FavoriteBookTest extends WebTestCase
         $this->assertEquals($id,$likedBook->getId());
 
         /**
-         * Test Cancel Favorite
+         * Test Add Favorite
          */
         $crawler = $this->client->request('GET', '/book_info/'.$id);
         $crawler->filter('#favorite_button')->click();
         sleep(2);
         $crawler = $this->client->request('GET', '/');
         // check homepage books is empty
-        $this->assertEmpty($crawler->filter('.card'));
-
-
+        $this->assertNotEmpty($crawler->filter('.card'));
     }
 }
