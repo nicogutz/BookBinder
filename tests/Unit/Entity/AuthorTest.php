@@ -18,7 +18,7 @@ class AuthorTest extends TestCase
     public function testAddBook():void
     {
         $book1 = new Book();
-        $this->assertNotNull($book1);
+        $this->assertNotNull($book1,'Book1 should not be null.');
         $author = new Author();
         $author->addBook($book1);
         $author->addBook($book1);
@@ -53,8 +53,8 @@ class AuthorTest extends TestCase
         $this->assertCount(1,$author->getBooks(),'List should have 1 books');
         $author->removeBook($book);
         $this->assertCount(0,$author->getBooks(),'List should be empty');
-        $this->assertFalse($author->getBooks()->contains($book));
-        $this->assertFalse($book->getAuthors()->contains($author));
+        $this->assertFalse($author->getBooks()->contains($book),'The author should not hold the book');
+        $this->assertFalse($book->getAuthors()->contains($author),'The book should not hold the author');
     }
 
 }

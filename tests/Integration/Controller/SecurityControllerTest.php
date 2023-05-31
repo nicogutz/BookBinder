@@ -20,7 +20,7 @@ class SecurityControllerTest extends WebTestCase
     {
         $this->client->request('GET', '/login');
         // Validate a successful response and some content
-        $this->assertResponseIsSuccessful();
+        $this->assertResponseIsSuccessful('Cannot get access to the /login page');
     }
 
     /**
@@ -51,7 +51,7 @@ class SecurityControllerTest extends WebTestCase
         $form['password'] = 'password';
         $crawler = $this->client->submit($form);
         $this->client->request('GET', '/');
-        $this->assertResponseIsSuccessful();
+        $this->assertResponseIsSuccessful('Cannot get access to the homepage');
         $this->assertSelectorTextContains('nav',
             'test_user | Logout',
             'Valid user should be able to login. ');
@@ -69,7 +69,7 @@ class SecurityControllerTest extends WebTestCase
         $form['password'] = 'password';
         $crawler = $this->client->submit($form);
         $this->client->request('GET', '/');
-        $this->assertResponseIsSuccessful();
+        $this->assertResponseIsSuccessful('Cannot get access to the homepage');
         $this->assertSelectorTextContains('nav',
             'Login',
             'Invalid user should not be able to log in.');
@@ -88,7 +88,7 @@ class SecurityControllerTest extends WebTestCase
         $form['password'] = 'wrongpassword';
         $crawler = $this->client->submit($form);
         $this->client->request('GET', '/');
-        $this->assertResponseIsSuccessful();
+        $this->assertResponseIsSuccessful('Cannot get access to the homepage');
         $this->assertSelectorTextContains('nav',
             'Login',
             'User should not be able to login with wrong password.');
@@ -107,7 +107,7 @@ class SecurityControllerTest extends WebTestCase
         $form['password'] = 'password';
         $crawler = $this->client->submit($form);
         $this->client->request('GET', '/');
-        $this->assertResponseIsSuccessful();
+        $this->assertResponseIsSuccessful('Cannot get access to the homepage');
         $this->assertSelectorTextContains('nav',
             'Admin',
             'Valid admin should be able to login. ');

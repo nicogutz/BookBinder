@@ -51,10 +51,10 @@ class BookInfoControllerTest extends WebTestCase
             'book_id' => $id,
             'user_id' => 1,
         ]);
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode(),'Fail for requesting book_like url');
         $path = parse_url($this->client->getRequest()->getUri(), PHP_URL_PATH);
         $direct = substr($path, 1);
-        $this->assertEquals('login',$direct);
+        $this->assertEquals('login',$direct,'The user should be redirected to login page.');
     }
 
     /**
@@ -65,33 +65,34 @@ class BookInfoControllerTest extends WebTestCase
         //displayed book ISBN
         $selectedBookISBN = 9780006479673;
         $selectedBook = $this->bookRepository->findByISBN($selectedBookISBN);
-        $this->assertCount(1,$selectedBook);
+        $this->assertCount(1,$selectedBook,'Only one book can be found by ISBN');
         //liked book ISBN
         $expectedLikedBookISBN = 9780002261982;
         $expectedLikedBook = $this->bookRepository->findByISBN($expectedLikedBookISBN);
-        $this->assertCount(1,$expectedLikedBook);
+        $this->assertCount(1,$expectedLikedBook,'Only one book can be found by ISBN');
         //get book info page
         $id = $selectedBook[0]->getId();
         $this->client->request('GET', '/book_info/'.$id);
-        $this->assertResponseIsSuccessful();
+        $this->assertResponseIsSuccessful('Fail direct to book_info page');
         //get user information
         $user = $this->userRepository->findOneBy(['username'=>'test_user']);
         $this->client->loginUser($user);
         $likedBook = $user->getBooks();
-        $this->assertCount(1,$likedBook);
-        $this->assertEquals($expectedLikedBook[0],$likedBook[0]);
+        $this->assertCount(1,$likedBook,'Only one book is in liked books');
+        $this->assertEquals($expectedLikedBook[0],$likedBook[0],'The book should be the book with ISBN 9780002261982');
         //test add favorite book function
         $this->client->request('POST','/book_like',[
             'book_id' => $id,
             'user_id' => $user->getId(),
         ]);
-        //$this->assertEquals(302, $this->client->getResponse()->getStatusCode());
-        $this->assertResponseIsSuccessful();
+        $this->assertResponseIsSuccessful('Fail for requesting book_like url');
         $user = $this->userRepository->findOneBy(['username'=>'test_user']);
         $likedBook = $user->getBooks();
-        $this->assertCount(2,$likedBook);
-        $this->assertEquals($expectedLikedBookISBN,$likedBook[0]->getISBN13());
-        $this->assertEquals($selectedBookISBN,$likedBook[1]->getISBN13());
+        $this->assertCount(2,$likedBook,'There should be 2 liked books');
+        $this->assertEquals($expectedLikedBookISBN,$likedBook[0]->getISBN13(),
+            'The book with 9780002261982 should be in the list.');
+        $this->assertEquals($selectedBookISBN,$likedBook[1]->getISBN13(),
+            'The book with 9780006479673 should be in the list.');
     }
 
     /**
@@ -115,7 +116,8 @@ class BookInfoControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $user = $this->userRepository->findOneBy(['username'=>'test_user']);
         $likedBooks = $user->getBooks();
-        $this->assertCount(0,$likedBooks);
+        $this->assertCount(0,$likedBooks,
+            'The book with 9780002261982 should not appear in the liked list');
     }
 
     public function testInvalidBooks():void

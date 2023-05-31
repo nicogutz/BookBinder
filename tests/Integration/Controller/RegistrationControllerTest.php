@@ -24,6 +24,9 @@ class RegistrationControllerTest extends WebTestCase
         $this->assertCount(1,$buttons,"page should only have one register button");
     }
 
+    /**
+     * @depends testRouting
+     */
     public function testSubmitValidData():void
     {
         // Request a specific page
@@ -42,6 +45,9 @@ class RegistrationControllerTest extends WebTestCase
         );
     }
 
+    /**
+     * @depends testSubmitValidData
+     */
     public function testEmptyAgreeTerms():void
     {
         // Request a specific page
@@ -60,6 +66,9 @@ class RegistrationControllerTest extends WebTestCase
         );
     }
 
+    /**
+     * @depends testSubmitValidData
+     */
     public function testInvalidPassword()
     {
         $this->client->request('GET', '/register');
@@ -100,6 +109,10 @@ class RegistrationControllerTest extends WebTestCase
             "Password should have at most 4096 characters"
         );
     }
+
+    /**
+     * @depends testSubmitValidData
+     */
     public function testInvalidUsername():void
     {
         // Request a specific page
@@ -130,8 +143,10 @@ class RegistrationControllerTest extends WebTestCase
         );
     }
 
-
-    //generate random length string
+    /**
+     * @param int $length
+     * @return string
+     */
     private function make_password(int $length): string
     {
         $str = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

@@ -26,6 +26,9 @@ class SearchTest extends PantherTestCase
         $this->assertSelectorTextContains('.col-md-9', 'Result');
     }
 
+    /**
+     * @depends testSearchRouting
+     */
     public function testSearchWithoutChoosingAttribute(): void
     {
         $client = static::createPantherClient();
@@ -42,7 +45,8 @@ class SearchTest extends PantherTestCase
         $alertText = $alert->getText();
         // To verify if the popup message matches the expected value
         $expectedMessage = 'Please select by what attribute you want to search the book';
-        $this->assertEquals($expectedMessage, $alertText);
+        $this->assertEquals($expectedMessage, $alertText,
+            'There should be an alert if user does not choose attribute');
         // Close Alert
         $alert->accept();
     }
@@ -63,7 +67,8 @@ class SearchTest extends PantherTestCase
         //$client->waitForElementToContain('#bookList', 'Spiders Web', 200);
         sleep(2);
         // Assert the expected results on the page
-        $this->assertSelectorTextContains('#bookList', 'Spiders Web');
+        $this->assertSelectorTextContains('#bookList', 'Spiders Web',
+            'The result of search by author is wrong');
         //test fuzzy search by author
         $client->executeScript("document.getElementById('Searchbar').value = ''");
         $crawler->filter('#Searchbar')->sendKeys('orwell');
@@ -95,7 +100,8 @@ class SearchTest extends PantherTestCase
         //$client->waitForElementToContain('#bookList', 'Spiders Web', 200);
         sleep(2);
         // Assert the expected results on the page
-        $this->assertSelectorTextContains('#bookList', 'Spiders Web');
+        $this->assertSelectorTextContains('#bookList', 'Spiders Web',
+            'The result of search by ISBN is wrong');
         //test fuzzy search by ISBN
         $client->executeScript("document.getElementById('Searchbar').value = ''");
         $crawler->filter('#Searchbar')->sendKeys('1982');
@@ -126,7 +132,8 @@ class SearchTest extends PantherTestCase
         //$client->waitForElementToContain('#bookList', 'Spiders Web', 200);
         sleep(2);
         // Assert the expected results on the page
-        $this->assertSelectorTextContains('#bookList', 'Spiders Web');
+        $this->assertSelectorTextContains('#bookList', 'Spiders Web',
+            'The result of search by title is wrong');
         //test fuzzy search by title
         $client->executeScript("document.getElementById('Searchbar').value = ''");
         $crawler->filter('#Searchbar')->sendKeys('spider');
@@ -206,7 +213,8 @@ class SearchTest extends PantherTestCase
         $books = $bookRepo->findByTitle('Spiders Web');
         $id = $books[0]->getId();
         // Assert the expected URL or check if it matches a specific pattern
-        $this->assertStringContainsString('/book_info/'.$id, $currentUrl);
+        $this->assertStringContainsString('/book_info/'.$id, $currentUrl,
+            'Cannot access to book_info page.');
     }
 
     /**

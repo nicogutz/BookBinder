@@ -40,7 +40,7 @@ class BookRepositoryTest extends KernelTestCase
          */
         $ID = 2;
         $result = $bookRepository->findByID($ID);
-        $this->assertSame(2, $result->getId());
+        $this->assertSame(2, $result->getId(),'the ID of the book Spiders Web should be 2');
     }
 
     /**
@@ -56,7 +56,7 @@ class BookRepositoryTest extends KernelTestCase
         $ISBN = 9780002261982;
         $result = $bookRepository->findByISBN($ISBN);
         foreach ($result as $index => $item) {
-            $this->assertSame(2, $item->getId());
+            $this->assertSame(2, $item->getId(),'the ID of the book Spiders Web should be 2');
         }
         /**
          *  Likely Search with single return
@@ -64,7 +64,7 @@ class BookRepositoryTest extends KernelTestCase
         $ISBN = 97800022619;
         $result = $bookRepository->findByISBN($ISBN);
         foreach ($result as $index => $item) {
-            $this->assertSame(2, $item->getId());
+            $this->assertSame(2, $item->getId(),'the ID of the book Spiders Web should be 2');
         }
 
         /**
@@ -73,7 +73,13 @@ class BookRepositoryTest extends KernelTestCase
         $ISBN = 978000;
         $result = $bookRepository->findByISBN($ISBN);
         $count = count($result);
-        $this->assertEquals(56, $count);
+        $this->assertEquals(56, $count,'There should be 56 books in the searched list');
+        /**
+         *  Invalid Search
+         */
+        $ISBN = 'ufghebref';
+        $result = $bookRepository->findByISBN($ISBN);
+        $this->assertCount(0,$result,'The returned list should be empty');
     }
 
     /**
@@ -89,7 +95,7 @@ class BookRepositoryTest extends KernelTestCase
         $Title = "Spiders Web";
         $result = $bookRepository->findByTitle($Title);
         foreach ($result as $index => $item) {
-            $this->assertSame(2, $item->getId());
+            $this->assertSame(2, $item->getId(),'the ID of the book Spiders Web should be 2');
         }
         /**
          * Likely Search with single return
@@ -97,7 +103,7 @@ class BookRepositoryTest extends KernelTestCase
         $Title = "Spiders W";
         $result = $bookRepository->findByTitle($Title);
         foreach ($result as $index => $item) {
-            $this->assertSame(2, $item->getId());
+            $this->assertSame(2, $item->getId(),'the ID of the book Spiders Web should be 2');
         }
         /**
          * Likely Search with multiple return
@@ -105,7 +111,13 @@ class BookRepositoryTest extends KernelTestCase
         $Title = "S";
         $result = $bookRepository->findByTitle($Title);
         $count = count($result);
-        $this->assertEquals(2525, $count);
+        $this->assertEquals(2525, $count,'There should be 2525 books in the searched list');
+        /**
+         *  Invalid Search
+         */
+        $ISBN = 'ufghebref';
+        $result = $bookRepository->findByTitle($ISBN);
+        $this->assertCount(0,$result,'The returned list should be empty');
     }
 
     /**
@@ -121,7 +133,7 @@ class BookRepositoryTest extends KernelTestCase
         $Author = "Charles Osborne";
         $result = $bookRepository->findByAuthor($Author);
         foreach ($result as $index => $item) {
-            $this->assertSame(2, $item->getId());
+            $this->assertSame(2, $item->getId(),'the ID of the book Spiders Web should be 2');
         }
 
         /**
@@ -130,7 +142,7 @@ class BookRepositoryTest extends KernelTestCase
         $Author = "Charles Osbor";
         $result = $bookRepository->findByAuthor($Author);
         foreach ($result as $index => $item) {
-            $this->assertSame(2, $item->getId());
+            $this->assertSame(2, $item->getId(),'the ID of the book Spiders Web should be 2');
         }
         /**
          * Likely Search with multiple return
@@ -138,6 +150,12 @@ class BookRepositoryTest extends KernelTestCase
         $Author = "Charles";
         $result = $bookRepository->findByAuthor($Author);
         $count = count($result);
-        $this->assertEquals(45, $count);
+        $this->assertEquals(45, $count,'There should be 45 books in the searched list');
+        /**
+         *  Invalid Search
+         */
+        $ISBN = 'ufghebref';
+        $result = $bookRepository->findByAuthor($ISBN);
+        $this->assertCount(0,$result,'The returned list should be empty');
     }
 }
