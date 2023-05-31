@@ -7,11 +7,12 @@ use App\Entity\User;
 use App\Entity\Author;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class FunctionalFixtures extends Fixture implements FixtureGroupInterface
+class FunctionalFixtures extends Fixture implements FixtureGroupInterface, OrderedFixtureInterface
 {
 
     public static function getGroups(): array
@@ -38,8 +39,6 @@ class FunctionalFixtures extends Fixture implements FixtureGroupInterface
         $spidersWeb->setAverageRating('3.83');
         $spidersWeb->setPrice('35.46');
         $spidersWeb->setGenre('action_adventure');
-        $this->addReference('group1', $spidersWeb);
-        $this->addReference('group2', $spidersWeb);
         $manager->persist($spidersWeb);
 
         $spiderDiary = new Book();
@@ -54,7 +53,6 @@ class FunctionalFixtures extends Fixture implements FixtureGroupInterface
         $spiderDiary->setAverageRating('4.25');
         $spiderDiary->setPrice('73.31');
         $spiderDiary->setGenre('fantasy');
-        $this->setReference('group2', $spiderDiary);
         $manager->persist($spiderDiary);
 
         $spidersHouse = new Book();
@@ -69,7 +67,6 @@ class FunctionalFixtures extends Fixture implements FixtureGroupInterface
         $spidersHouse->setAverageRating('4.03');
         $spidersHouse->setPrice('11.03');
         $spidersHouse->setGenre('action_adventure');
-        $this->setReference('group2', $spidersHouse);
         $manager->persist($spidersHouse);
 
         $spidersMoon = new Book();
@@ -84,7 +81,6 @@ class FunctionalFixtures extends Fixture implements FixtureGroupInterface
         $spidersMoon->setAverageRating('3.95');
         $spidersMoon->setPrice('28.57');
         $spidersMoon->setGenre('science_fiction');
-        $this->setReference('group2', $spidersMoon);
         $manager->persist($spidersMoon);
 
         $strangers = new Book();
@@ -99,7 +95,6 @@ class FunctionalFixtures extends Fixture implements FixtureGroupInterface
         $strangers->setAverageRating('3.78');
         $strangers->setPrice('38.8');
         $strangers->setGenre('action_adventure');
-        $this->setReference('group2', $strangers);
         $manager->persist($strangers);
 
         $liars = new Book();
@@ -114,8 +109,12 @@ class FunctionalFixtures extends Fixture implements FixtureGroupInterface
         $liars->setAverageRating('3.59');
         $liars->setPrice('99.84');
         $liars->setGenre('action_adventure');
-        $this->setReference('group2', $liars);
         $manager->persist($liars);
         $manager->flush();
+    }
+
+    public function getOrder()
+    {
+        return 1;
     }
 }

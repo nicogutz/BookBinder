@@ -7,11 +7,12 @@ use App\Entity\User;
 use App\Entity\Author;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserFixtures extends Fixture implements FixtureGroupInterface
+class UserFixtures extends Fixture implements FixtureGroupInterface, OrderedFixtureInterface
 {
     private UserPasswordHasherInterface $passwordHasher;
     private EntityManagerInterface $entityManager;
@@ -56,5 +57,10 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
         $manager->persist($user);
 
         $manager->flush();
+    }
+
+    public function getOrder()
+    {
+        return 2;
     }
 }
