@@ -83,12 +83,12 @@ class FavoriteBookTest extends WebTestCase
         // verify likedbook is not null
         $this->assertNotNull($likedBook, 'First liked book not found.');
         //verify the correct book
-        $this->assertEquals(2,$likedBook->getId());
+        $this->assertEquals($id,$likedBook->getId());
 
         /**
          * Test Cancel Favorite
          */
-        $crawler = $this->client->request('GET', '/book_info/2');
+        $crawler = $this->client->request('GET', '/book_info/'.$id);
         $crawler->filter('#favorite_button')->click();
         sleep(2);
         $crawler = $this->client->request('GET', '/');

@@ -216,7 +216,7 @@ class SearchTest extends PantherTestCase
     {
         list($client, $crawler) = $this->searchBookWithTitleSpider();
         //$client->waitForElementToContain('#bookList', 'Spiders Web', 200);
-        sleep(2);
+        sleep(10);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(4, $books);
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');

@@ -27,6 +27,9 @@ class AuthorTest extends TestCase
         $this->assertTrue($book1->getAuthors()->contains($author),'author should be connected to the book.');
     }
 
+    /**
+     * @depends testAddBook
+     */
     public function testGetBooks():void
     {
         $book1 = new Book();
@@ -39,6 +42,9 @@ class AuthorTest extends TestCase
         $this->assertTrue($author->getBooks()->contains($book2),'Book2 should be in the book list');
     }
 
+    /**
+     * @depends testAddBook
+     */
     public function testRemoveBook():void
     {
         $author = new Author();
