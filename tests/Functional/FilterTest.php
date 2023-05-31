@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\Functional\Functional;
 
 use Symfony\Component\Panther\PantherTestCase;
 
