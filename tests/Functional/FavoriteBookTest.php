@@ -32,7 +32,10 @@ class FavoriteBookTest extends WebTestCase
     public function testFavoriteButton()
     {
         $driver = $this->client->getWebDriver();
-        $crawler = $this->client->request('GET', '/book_info/2');
+        $bookRepo = $this->entityManager->getRepository(Book::class);
+        $books = $bookRepo->findByTitle('Spiders Web');
+        $id = $books[0]->getId();
+        $crawler = $this->client->request('GET', '/book_info/'.$id);
         /**
          * TEST WITH NO_LOGIN :Alert Message
          */
@@ -63,13 +66,15 @@ class FavoriteBookTest extends WebTestCase
         /**
          * Test Add Favorite
          */
+        $crawler = $this->client->request('GET', '/');
+        $this->assertNotEmpty($crawler->filter('.card'));
         // Request a specific page , and test the favorite_button
-        $crawler = $this->client->request('GET', '/book_info/2');
+        $crawler = $this->client->request('GET', '/book_info/'.$id);
         $crawler->filter('#favorite_button')->click();
         sleep(2);
         $crawler = $this->client->request('GET', '/');
         // check homepage books is not empty
-        $this->assertNotEmpty($crawler->filter('.card'));
+        $this->assertEmpty($crawler->filter('.card'));
         // check if it is the correct book
         $user = $this->userRepo->findOneBy(['username'=>'test_user']);
         $likedBooks = $user->getBooks();

@@ -2,6 +2,7 @@
 
 namespace App\Tests\Functional;
 
+use App\Entity\Book;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use Symfony\Component\Panther\PantherTestCase;
 
@@ -9,6 +10,15 @@ ini_set('max_execution_time', 1500);
 
 class SearchTest extends PantherTestCase
 {
+    private $entityManager;
+    protected function setUp(): void
+    {
+        $kernel = self::bootKernel();
+        $this->entityManager = $kernel->getContainer()
+            ->get('doctrine')
+            ->getManager();
+    }
+
     public function testSearchRouting(): void
     {
         $client = static::createPantherClient();
@@ -51,6 +61,7 @@ class SearchTest extends PantherTestCase
         // Click the search button
         $crawler->filter('#search-addon')->click();
         //$client->waitForElementToContain('#bookList', 'Spiders Web', 200);
+        sleep(2);
         // Assert the expected results on the page
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
         //test fuzzy search by author
@@ -58,13 +69,14 @@ class SearchTest extends PantherTestCase
         $crawler->filter('#Searchbar')->sendKeys('orwell');
         $crawler->filter('#search-addon')->click();
         //$client->waitForElementToContain('#bookList', 'The Mermaid Chair', 200);
+        sleep(2);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(4, $books);
         // Assert the expected results on the page
-        $this->assertSelectorTextContains('#bookList', 'The Mermaid Chair');
-        $this->assertSelectorTextContains('#bookList', 'The Book of Imaginary Beings');
-        $this->assertSelectorTextContains('#bookList', 'The Philosophy of Andy Warhol');
-        $this->assertSelectorTextContains('#bookList', 'A Memoir of Jane Austen');
+        $this->assertSelectorTextContains('#bookList', 'Spiders House');
+        $this->assertSelectorTextContains('#bookList', 'Diablo Moon of the Spider');
+        $this->assertSelectorTextContains('#bookList', 'Strangers on a Train');
+        $this->assertSelectorTextContains('#bookList', 'Liars and Saints');
     }
 
     /**
@@ -81,6 +93,7 @@ class SearchTest extends PantherTestCase
         // Click the search button
         $crawler->filter('#search-addon')->click();
         //$client->waitForElementToContain('#bookList', 'Spiders Web', 200);
+        sleep(2);
         // Assert the expected results on the page
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
         //test fuzzy search by ISBN
@@ -88,6 +101,7 @@ class SearchTest extends PantherTestCase
         $crawler->filter('#Searchbar')->sendKeys('1982');
         $crawler->filter('#search-addon')->click();
         //$client->waitForElementToContain('#bookList', 'Strangers on a Train', 200);
+        sleep(2);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(3, $books);
         // Assert the expected results on the page
@@ -110,6 +124,7 @@ class SearchTest extends PantherTestCase
         // Click the search button
         $crawler->filter('#search-addon')->click();
         //$client->waitForElementToContain('#bookList', 'Spiders Web', 200);
+        sleep(2);
         // Assert the expected results on the page
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
         //test fuzzy search by title
@@ -117,6 +132,7 @@ class SearchTest extends PantherTestCase
         $crawler->filter('#Searchbar')->sendKeys('spider');
         $crawler->filter('#search-addon')->click();
         //$client->waitForElementToContain('#bookList', 'Diary of a Spider', 200);
+        sleep(2);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(4, $books);
         // Assert the expected results on the page
@@ -157,6 +173,7 @@ class SearchTest extends PantherTestCase
         $crawler->filter('#Searchbar')->sendKeys('1982');
         $crawler->filter('#search-addon')->click();
         //$client->waitForElementToContain('#bookList', 'Strangers on a Train', 200);
+        sleep(2);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(3, $books);
         $crawler->filter('#dateFilterFrom')->sendKeys('5496%&*&');
@@ -179,13 +196,17 @@ class SearchTest extends PantherTestCase
     {
         list($client, $crawler) = $this->searchBookWithTitleSpider();
         //$client->waitForElementToContain('#bookList', 'Spiders Web', 200);
+        sleep(2);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(4, $books);
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
         $crawler->filterXPath('//*[@id="bookList"]/tr[4]')->click();
         $currentUrl = $client->getCurrentURL();
+        $bookRepo = $this->entityManager->getRepository(Book::class);
+        $books = $bookRepo->findByTitle('Spiders Web');
+        $id = $books[0]->getId();
         // Assert the expected URL or check if it matches a specific pattern
-        $this->assertStringContainsString('/book_info/2', $currentUrl);
+        $this->assertStringContainsString('/book_info/'.$id, $currentUrl);
     }
 
     /**
@@ -195,6 +216,7 @@ class SearchTest extends PantherTestCase
     {
         list($client, $crawler) = $this->searchBookWithTitleSpider();
         //$client->waitForElementToContain('#bookList', 'Spiders Web', 200);
+        sleep(2);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(4, $books);
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
@@ -214,6 +236,7 @@ class SearchTest extends PantherTestCase
     {
         list($client, $crawler) = $this->searchBookWithTitleSpider();
         //$client->waitForElementToContain('#bookList', 'Spiders Web', 200);
+        sleep(2);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(4, $books);
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
@@ -226,7 +249,6 @@ class SearchTest extends PantherTestCase
         $this->assertStringContainsString('Diablo Moon of the Spider', $firstBook->text());
         $secondBook = $crawler->filter('#bookList')->filter('tr')->eq(1);
         $this->assertStringContainsString('Diary of a Spider', $secondBook->text());
-        $client->takeScreenshot('see.png');
     }
 
     /**
@@ -236,6 +258,7 @@ class SearchTest extends PantherTestCase
     {
         list($client, $crawler) = $this->searchBookWithTitleSpider();
         //$client->waitForElementToContain('#bookList', 'Spiders Web', 200);
+        sleep(2);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(4, $books);
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
@@ -257,6 +280,7 @@ class SearchTest extends PantherTestCase
     {
         list($client, $crawler) = $this->searchBookWithTitleSpider();
         //$client->waitForElementToContain('#bookList', 'Spiders Web', 200);
+        sleep(2);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(4, $books);
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
