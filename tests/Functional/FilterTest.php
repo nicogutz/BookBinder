@@ -10,7 +10,7 @@ class FilterTest extends PantherTestCase
     public function testFilterByGenre(): void
     {
         list($client, $crawler) = $this->searchBookWithTitleSpider();
-        $client->waitForElementToContain('#bookList','Spiders Web',20);
+        //$client->waitForElementToContain('#bookList','Spiders Web',200);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(4,$books);
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
@@ -32,7 +32,7 @@ class FilterTest extends PantherTestCase
     public function testFilterByYear(): void
     {
         list($client, $crawler) = $this->searchBookWithTitleSpider();
-        $client->waitForElementToContain('#bookList','Spiders Web',20);
+        //$client->waitForElementToContain('#bookList','Spiders Web',200);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(4,$books);
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
@@ -55,7 +55,7 @@ class FilterTest extends PantherTestCase
     public function testFilterByPrice():void
     {
         list($client, $crawler) = $this->searchBookWithTitleSpider();
-        $client->waitForElementToContain('#bookList','Spiders Web',20);
+        //$client->waitForElementToContain('#bookList','Spiders Web',200);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(4,$books);
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
@@ -75,7 +75,7 @@ class FilterTest extends PantherTestCase
     public function testFilterByAll(): void
     {
         list($client, $crawler) = $this->searchBookWithTitleSpider();
-        $client->waitForElementToContain('#bookList','Spiders Web',20);
+        //$client->waitForElementToContain('#bookList','Spiders Web',200);
         $books = $crawler->filter('#bookList tr');
         $this->assertCount(4,$books);
         $this->assertSelectorTextContains('#bookList', 'Spiders Web');
