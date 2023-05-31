@@ -1,5 +1,9 @@
 #define the base docker image file used for all jobs
 image: composer:2.5
+default:
+  artifacts:
+    expire_in: 20min
+
 # Before we start any job, prepare the container with some extra configuration
 # e.g. setting the ssh credentials, so we can later copy to shell.studev.groept.be
 before_script:
@@ -23,38 +27,62 @@ stages:
     - test
     - deploy
 
-test-job:
+test-build:
     only:
         - master
-
     stage: test
+    artifacts:
+        paths:
+            - vendor/
+        reports:
+            dotenv: build.env
     services:
         # a container with a temporary mysql db for running unit tests
         - mysql:8
-    variables:
-        # environment variables for configuring the mysql test database container
-        MYSQL_DATABASE: main_test
-        MYSQL_USER: user
-        MYSQL_ROOT_PASSWORD: pass
-        MYSQL_PASSWORD: pass
-        PANTHER_APP_ENV: test
-        # set the correct DSN in Symfony to connect to the temporary database
-        DATABASE_URL: "mysql://root:pass@mysql/main"
     script:
+        - echo "MYSQL_DATABASE=main_test" >> build.env
+        - echo "MYSQL_USER=ueser" >> build.env
+        - echo "MYSQL_ROOT_PASSWORD=pass" >> build.env
+        - echo "MYSQL_PASSWORD=pass" >> build.env
+        - echo "PANTHER_APP_ENV=test" >> build.env
+        - echo "DATABASE_URL=mysql://root:pass@mysql/main" >> build.env
         - composer install
         # run the migration on the temporary database
-        - php bin/console debug:container --env-vars
         - php bin/console doctrine:migrations:migrate --env=test
         # load some test data in the temporary database
         - php bin/console --env=test doctrine:fixtures:load --append -n 
         # run the tests (using the temporary database)
-        - php bin/phpunit
 
+test-unit:
+    stage: test
+    needs:
+        job: test-build
+        artifacts: true
+    script:
+        - php bin/phpunit tests/Unit
+
+test-integration:
+    stage: test
+    needs:
+        job: test-build
+        artifacts: true
+    script:
+        - php bin/phpunit tests/Integration
+
+test-functional:
+    stage: test
+    needs:
+        job: test-build
+        artifacts: true
+    script:
+        - php bin/phpunit tests/Functional
 
 deploy-job:
     stage: deploy
     needs: 
-        - test-job
+        - test-unit
+        - test-integration
+        - test-functional
     # run this job only when there is a push on the master branch
     only:
         - master
