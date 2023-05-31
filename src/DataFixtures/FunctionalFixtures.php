@@ -118,6 +118,7 @@ class FunctionalFixtures extends Fixture implements FixtureGroupInterface
         $liars->setPrice('99.84');
         $liars->setGenre('action_adventure');
         $manager->persist($liars);
+        $manager->flush();
 
         $user = new User();
         $book = $this->entityManager->getRepository(Book::class)->findByTitle('Spiders Web');
