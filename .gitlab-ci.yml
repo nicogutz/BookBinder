@@ -9,7 +9,6 @@ default:
 before_script:
     # create a local .ssh folder in the container
     - mkdir -p ~/.ssh
-    # start the ssh-agent and add the private key to the system
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | ssh-add -
     # add the fingerprint for shell.studev.groept.be as a trusted host
