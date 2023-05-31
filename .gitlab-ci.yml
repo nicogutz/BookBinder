@@ -1,5 +1,9 @@
 #define the base docker image file used for all jobs
 image: composer:2.5
+default:
+  artifacts:
+    expire_in: 20min
+
 # Before we start any job, prepare the container with some extra configuration
 # e.g. setting the ssh credentials, so we can later copy to shell.studev.groept.be
 before_script:
@@ -23,38 +27,69 @@ stages:
     - test
     - deploy
 
-test-job:
+test-build:
     only:
         - master
+    stage: test
+    artifacts:
+        paths:
+            - vendor/
+    script:
+        - composer install
 
+test-unit:
+    stage: test
+    needs:
+        job: test-build
+        artifacts: true
+    script:
+        - php bin/phpunit tests/Unit
+
+test-integration:
     stage: test
     services:
-        # a container with a temporary mysql db for running unit tests
         - mysql:8
+    needs:
+        job: test-build
+        artifacts: true
     variables:
-        # environment variables for configuring the mysql test database container
         MYSQL_DATABASE: main_test
         MYSQL_USER: user
         MYSQL_ROOT_PASSWORD: pass
         MYSQL_PASSWORD: pass
         PANTHER_APP_ENV: test
-        # set the correct DSN in Symfony to connect to the temporary database
         DATABASE_URL: "mysql://root:pass@mysql/main"
     script:
-        - composer install
-        # run the migration on the temporary database
-        - php bin/console debug:container --env-vars
         - php bin/console doctrine:migrations:migrate --env=test
-        # load some test data in the temporary database
         - php bin/console --env=test doctrine:fixtures:load --append -n 
-        # run the tests (using the temporary database)
-        - php bin/phpunit
+        - php bin/phpunit tests/Integration
 
+test-functional:
+    stage: test
+    services:
+        - mysql:8
+    needs:
+        job: test-build
+        artifacts: true
+    variables:
+        MYSQL_DATABASE: main_test
+        MYSQL_USER: user
+        MYSQL_ROOT_PASSWORD: pass
+        MYSQL_PASSWORD: pass
+        PANTHER_APP_ENV: test
+        DATABASE_URL: "mysql://root:pass@mysql/main"
+    script:
+        - php bin/console doctrine:migrations:migrate --env=test
+        - php bin/console doctrine:migrations:migrate prev --env=test
+        - php bin/console --env=test doctrine:fixtures:load --append -n 
+        - php bin/phpunit tests/Functional
 
 deploy-job:
     stage: deploy
     needs: 
-        - test-job
+        - test-unit
+        - test-integration
+        - test-functional
     # run this job only when there is a push on the master branch
     only:
         - master
@@ -62,7 +97,7 @@ deploy-job:
         DATABASE_URL: "$SECRET_DATABASE_URL"
         APP_ENV: "prod"
     script:
-        - composer install --no-dev
+        - composer install --no-dev --no-autoloader
         # rsync is a copy/sync tool we use to copy the current folder ./ to studev
         # we ignore the .git folder and the .env file
         # we delete the files on the remote server that are not present in the local copy

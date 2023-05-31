@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\Functional\Functional\Functional;
 use App\Entity\User;
 use App\Entity\Book;
 use Facebook\WebDriver\WebDriverExpectedCondition;
