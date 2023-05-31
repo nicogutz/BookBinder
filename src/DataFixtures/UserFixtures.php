@@ -77,7 +77,6 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
         $spidersWeb->setAverageRating('3.83');
         $spidersWeb->setPrice('35.46');
         $spidersWeb->setGenre('action_adventure');
-        $this->addReference('group1',$spidersWeb);
         $this->addReference('group2',$spidersWeb);
         $manager->persist($spidersWeb);
 
