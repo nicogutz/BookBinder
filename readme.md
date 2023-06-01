@@ -22,3 +22,7 @@ Provide a short description of the actual implemented features in your project
 * Advanced book search and filtering
 * Book favorites
 * Admin page for library employees
+ ---
+
+## Test Coverage
+![coverage.png](coverage.png)
