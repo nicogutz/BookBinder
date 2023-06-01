@@ -47,6 +47,9 @@ class BookTest extends TestCase
         $this->assertCount(1,$book->getUsers(),'Book can not be liked by one user twice');
     }
 
+    /**
+     * @depends testAddUser
+     */
     public function testRemoveUser():void
     {
         $book = new Book();
