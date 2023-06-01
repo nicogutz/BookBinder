@@ -10,7 +10,7 @@ Provide a link to the main page of your application. Or if you have multiple par
 ### Regular user
 - login: user
 - password: password
-### Admin / Library manager / ...
+### Admin
 - login: admin
 - password: password
 
@@ -22,38 +22,3 @@ Provide a short description of the actual implemented features in your project
 * Advanced book search and filtering
 * Book favorites
 * Admin page for library employees
-
-
-First - To run node:
-> yarn watch
-
-Second - To run docker:
-> docker-compose up -d
-
-Third - To run the server:
-> symfony server:start -d
-
-To stop the server:
-> symfony server:stop
-
-To make a new entity:
-> symfony console make:entity
-
-To make a new migration:
-> symfony console make:migration
-
-> symfony console doctrine:migrations:migrate
-
-To migrate to test env:
-> symfony console doctrine:migrations:migrate --env=test
->php .\bin\console  doctrine:migrations:migrate --env=test
-
- Execute the test: 
->php bin/phpunit path
-
- DAMA 
->php bin/console --env=test doctrine:fixtures:load --append -n
-
-
- To query the database:
-> symfony console doctrine:query:sql "SELECT * FROM vinyl_mix"
