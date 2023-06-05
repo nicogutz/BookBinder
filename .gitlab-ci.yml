@@ -111,6 +111,7 @@ deploy-job:
                     --exclude="bundles"
                     --exclude=".env"
                     --exclude=".htaccess"
+                    --exclude="config/packages/framework.yaml"
                     --delete
                     ./ a22web25@shell.studev.groept.be:/var/www/html
         - ssh -t a22web25@shell.studev.groept.be "cd /var/www/html; php bin/console doctrine:migrations:migrate; php bin/console cache:clear;"
